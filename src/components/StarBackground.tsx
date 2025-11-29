@@ -73,7 +73,19 @@ export const StarBackground = () => {
     useEffect(() => {
         generateStars();
         generateMeteors();
+
+        const handleResize = () => {
+            generateStars();
+            generateMeteors();
+        }
+
+        window.addEventListener("resize", handleResize);
+
+        return () => {
+            window.removeEventListener("resize", handleResize);
+        }
     }, []);
+    
     return( <div className={cn("fixed inset-0",
         "overflow-hidden pointer-events-none z-0 bg-transparent",
     )}>
