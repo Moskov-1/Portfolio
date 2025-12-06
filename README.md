@@ -25,6 +25,11 @@ Example: `ls -la /root/.ssh/`
 ### `grep <pattern> <file>`
 Search for pattern in a file.
 Example: `grep -ri "N4SKFC7WUPKAR36XSFRSM2AHGE" .`
+`- r` means `recursive`
+`i` means `ingore-case`
+
+### `grep -iE "A-Za-z0-9" .`
+find all alpha numerics. 
 
 ### `ps aux`
 Show running processes.
