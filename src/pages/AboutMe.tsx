@@ -1,3 +1,4 @@
+import { BriefcaseBusiness, Code, Code2, CodeSquare, User } from "lucide-react";
 import { cn } from "../lib/utils";
 
 export const AboutMe = () => {
@@ -45,6 +46,43 @@ export const AboutMe = () => {
                         >My CV</a>
                     </div>
                 </div>
+
+                <div className="grid grid-cols-1 gap-6">
+                    <div className="gradient-border p-6 card-hover">
+                        <div className="flex items-start gap-4">
+                            <div className="p-3 rounded-full bg-primary/10">
+                                <Code className='h-6 w-6 text-primary' />
+                            </div>
+                            <div className="text-left">
+                                <h4 className="font-semibold text-lg">Backend Engineer</h4>
+                                <p className="text-muted-foreground">March 2025 - Present</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="gradient-border p-6 card-hover">
+                        <div className="flex items-start gap-4">
+                            <div className="p-3 rounded-full bg-primary/10">
+                                <User className='h-6 w-6 text-primary' />
+                            </div>
+                            <div className="text-left">
+                                <h4 className="font-semibold text-lg">Backend Engineer</h4>
+                                <p className="text-muted-foreground">March 2025 - Present</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="gradient-border p-6 card-hover">
+                        <div className="flex items-start gap-4">
+                            <div className="p-3 rounded-full bg-primary/10">
+                                <BriefcaseBusiness className='h-6 w-6 text-primary' />
+                            </div>
+                            <div className="text-left">
+                                <h4 className="font-semibold text-lg">Backend Engineer</h4>
+                                <p className="text-muted-foreground">March 2025 - Present</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
             </div>
         </div>  
 
