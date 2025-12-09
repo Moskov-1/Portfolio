@@ -7,25 +7,27 @@ import { SkillsSection } from "./SkillsSection"
 import { ProjectSection } from "./ProjectSection"
 import { ContactSection } from "./ContactSection"
 import { Footer } from "./Footer"
+import { Toaster } from "../ui/toaster"
 export const Home = () => {
     return (
         <>
             <div className="min-h-screen bg-background text-foreground
             overflow-x-hidden">
 
-            <ThemeToggle/>
-            <StarBackground />
-            {/* Shooting Star Background Effect */}
-            <Navbar/>
-            <main>
-                <HeroSection />
-                <AboutMe />
-                <SkillsSection />
-                <ProjectSection />
-                <ContactSection />
-            </main>
-            <Footer />
+                <ThemeToggle />
+                <StarBackground />
+                {/* Shooting Star Background Effect */}
+                <Navbar />
+                <main>
+                    <HeroSection />
+                    <AboutMe />
+                    <SkillsSection />
+                    <ProjectSection />
+                    <ContactSection />
+                </main>
+                <Footer />
+                <Toaster />
             </div>
         </>
     )
-} 
+}
