@@ -1,4 +1,4 @@
-import { ArrowRight, ExternalLink, GitBranch, GitFork, GitGraph } from "lucide-react";
+import { ArrowRight, ExternalLink, GitFork } from "lucide-react";
 
 const projects = [
     {
@@ -34,18 +34,18 @@ export const ProjectSection = () => {
             <div className="container mx-auto max-w-5xl">
                 <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">
                     {" "}
-                    Featured <span className="text-primary">Projects</span> 
+                    Featured <span className="text-primary">Projects</span>
                 </h2>
                 <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
                     Here are some of the projects I have worked on.
                 </p>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
                     {projects.map((project, index) => (
-                        <div key={index} 
-                        className="group bg-card rounded-lg overflow-hidden shadow-xs card-hover">
+                        <div key={index}
+                            className="group bg-card rounded-lg overflow-hidden shadow-xs card-hover">
                             <div className="h-48 overflow-hidden">
-                                <img src={project.image} alt={project.title} 
-                                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                                <img src={project.image} alt={project.title}
+                                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
                             </div>
                             <div className="p-6">
                                 <div className="flex flex-wrap gap-2 mb-4">
@@ -75,8 +75,8 @@ export const ProjectSection = () => {
                     ))}
                 </div>
                 <div className="text-center mt-12">
-                    <a href="https://github.com/Moskov-1" target="_blank" 
-                    className="space-btn w-fit flex items-center mx-auto gap-2"
+                    <a href="https://github.com/Moskov-1" target="_blank"
+                        className="space-btn w-fit flex items-center mx-auto gap-2"
                     >
                         My Github <ArrowRight size={16} />
                     </a>

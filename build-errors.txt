@@ -1,0 +1,39 @@
+﻿src/components/Navbar.tsx(14,24): error TS6133: 'setMenuOpen' is declared but its value is never read.
+src/pages/AboutMe.tsx(1,35): error TS6133: 'Code2' is declared but its value is never read.
+src/pages/AboutMe.tsx(1,42): error TS6133: 'CodeSquare' is declared but its value is never read.
+src/pages/ProjectSection.tsx(1,36): error TS6133: 'GitBranch' is declared but its value is never read.
+src/pages/ProjectSection.tsx(1,56): error TS6133: 'GitGraph' is declared but its value is never read.
+src/ui/toast.tsx(6,20): error TS2307: Cannot find module '@/lib/utils' or its corresponding type declarations.
+src/ui/toast.tsx(10,43): error TS2339: Property 'className' does not exist on type '{}'.
+src/ui/toast.tsx(12,5): error TS2322: Type 'ForwardedRef<unknown>' is not assignable to type 'Ref<HTMLOListElement> | undefined'.
+  Type 'RefObject<unknown>' is not assignable to type 'Ref<HTMLOListElement> | undefined'.
+    Type 'RefObject<unknown>' is not assignable to type 'RefObject<HTMLOListElement | null>'.
+      Type 'unknown' is not assignable to type 'HTMLOListElement | null'.
+src/ui/toast.tsx(38,35): error TS2339: Property 'className' does not exist on type '{}'.
+src/ui/toast.tsx(38,46): error TS2339: Property 'variant' does not exist on type '{}'.
+src/ui/toast.tsx(41,7): error TS2322: Type 'ForwardedRef<unknown>' is not assignable to type 'Ref<HTMLLIElement> | undefined'.
+  Type 'RefObject<unknown>' is not assignable to type 'Ref<HTMLLIElement> | undefined'.
+    Type 'RefObject<unknown>' is not assignable to type 'RefObject<HTMLLIElement | null>'.
+      Type 'unknown' is not assignable to type 'HTMLLIElement | null'.
+src/ui/toast.tsx(49,41): error TS2339: Property 'className' does not exist on type '{}'.
+src/ui/toast.tsx(51,5): error TS2322: Type 'ForwardedRef<unknown>' is not assignable to type 'Ref<HTMLButtonElement> | undefined'.
+  Type 'RefObject<unknown>' is not assignable to type 'Ref<HTMLButtonElement> | undefined'.
+    Type 'RefObject<unknown>' is not assignable to type 'RefObject<HTMLButtonElement | null>'.
+      Type 'unknown' is not assignable to type 'HTMLButtonElement | null'.
+src/ui/toast.tsx(61,40): error TS2339: Property 'className' does not exist on type '{}'.
+src/ui/toast.tsx(63,5): error TS2322: Type 'ForwardedRef<unknown>' is not assignable to type 'Ref<HTMLButtonElement> | undefined'.
+  Type 'RefObject<unknown>' is not assignable to type 'Ref<HTMLButtonElement> | undefined'.
+    Type 'RefObject<unknown>' is not assignable to type 'RefObject<HTMLButtonElement | null>'.
+      Type 'unknown' is not assignable to type 'HTMLButtonElement | null'.
+src/ui/toast.tsx(76,40): error TS2339: Property 'className' does not exist on type '{}'.
+src/ui/toast.tsx(78,5): error TS2322: Type 'ForwardedRef<unknown>' is not assignable to type 'Ref<HTMLDivElement> | undefined'.
+  Type 'RefObject<unknown>' is not assignable to type 'Ref<HTMLDivElement> | undefined'.
+    Type 'RefObject<unknown>' is not assignable to type 'RefObject<HTMLDivElement | null>'.
+      Type 'unknown' is not assignable to type 'HTMLDivElement | null'.
+src/ui/toast.tsx(85,46): error TS2339: Property 'className' does not exist on type '{}'.
+src/ui/toast.tsx(87,5): error TS2322: Type 'ForwardedRef<unknown>' is not assignable to type 'Ref<HTMLDivElement> | undefined'.
+  Type 'RefObject<unknown>' is not assignable to type 'Ref<HTMLDivElement> | undefined'.
+    Type 'RefObject<unknown>' is not assignable to type 'RefObject<HTMLDivElement | null>'.
+      Type 'unknown' is not assignable to type 'HTMLDivElement | null'.
+src/ui/toaster.tsx(20,40): error TS2559: Type '{ children: any; }' has no properties in common with type 'IntrinsicAttributes & RefAttributes<unknown>'.
+src/ui/toaster.tsx(22,34): error TS2559: Type '{ children: any; }' has no properties in common with type 'IntrinsicAttributes & RefAttributes<unknown>'.
