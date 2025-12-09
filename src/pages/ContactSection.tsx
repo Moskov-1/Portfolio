@@ -4,7 +4,7 @@ import { useState } from "react";
 
 export const ContactSection = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         setIsSubmitting(true);
