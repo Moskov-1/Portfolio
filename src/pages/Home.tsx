@@ -8,9 +8,11 @@ import { ProjectSection } from "./ProjectSection"
 import { ContactSection } from "./ContactSection"
 import { Footer } from "./Footer"
 import { Toaster } from "../ui/toaster"
+import { ThemeTransitionProvider } from "../context/ThemeTransitionContext"
+
 export const Home = () => {
     return (
-        <>
+        <ThemeTransitionProvider>
             <div className="min-h-screen bg-background text-foreground
             overflow-x-hidden">
 
@@ -28,6 +30,6 @@ export const Home = () => {
                 <Footer />
                 <Toaster />
             </div>
-        </>
+        </ThemeTransitionProvider>
     )
 }

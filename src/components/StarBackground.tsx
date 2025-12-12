@@ -1,9 +1,9 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { cn } from "../lib/utils";
+import { useThemeTransition } from "../context/ThemeTransitionContext";
 
 // Large pool of pre-defined meteors with varied positions and sizes
-// We only display a subset at a time and cycle through when animations complete
 const METEOR_POOL = [
     // Small meteors
     { size: 1.2, x: 5, y: 5, duration: 3.5 },
@@ -44,7 +44,6 @@ const METEOR_POOL = [
     { size: 1.2, x: 55, y: 12, duration: 3.25 },
 ];
 
-// How many meteors visible at once
 const VISIBLE_COUNT = 4;
 
 type ActiveMeteor = {
@@ -67,6 +66,8 @@ export const StarBackground = () => {
     const [activeMeteors, setActiveMeteors] = useState<ActiveMeteor[]>([]);
     const [nextPoolIndex, setNextPoolIndex] = useState(VISIBLE_COUNT);
     const [keyCounter, setKeyCounter] = useState(VISIBLE_COUNT);
+
+    const { isTransitioning, direction } = useThemeTransition();
 
     const generateStars = () => {
         const numberOfStars = Math.floor(
@@ -96,13 +97,12 @@ export const StarBackground = () => {
             initial.push({
                 poolIndex: i,
                 key: i,
-                delay: i * 3, // Stagger initial delays
+                delay: i * 3,
             });
         }
         setActiveMeteors(initial);
     }, []);
 
-    // When a meteor's animation completes, replace it with next from pool
     const handleMeteorComplete = useCallback((meteorKey: number) => {
         setActiveMeteors(prev =>
             prev.map(m => {
@@ -113,7 +113,7 @@ export const StarBackground = () => {
                     return {
                         poolIndex: newIndex,
                         key: keyCounter + 1,
-                        delay: 0, // No delay for replacement
+                        delay: 0,
                     };
                 }
                 return m;
@@ -135,25 +135,73 @@ export const StarBackground = () => {
         }
     }, []);
 
+    // Get star animation style based on transition - smoother with ease-in-out
+    const getStarStyle = (star: Star) => {
+        const baseStyle = {
+            top: star.y + "%",
+            left: star.x + "%",
+            width: star.size + "px",
+            height: star.size + "px",
+        };
+
+        if (isTransitioning && direction === 'to-light') {
+            return {
+                ...baseStyle,
+                animation: 'stars-timelapse-out 1.5s ease-in-out forwards',
+            };
+        }
+
+        if (isTransitioning && direction === 'to-dark') {
+            return {
+                ...baseStyle,
+                animation: 'stars-timelapse-in 1.5s ease-in-out forwards',
+            };
+        }
+
+        return {
+            ...baseStyle,
+            opacity: star.opacity,
+            animation: star.animation,
+            animationDuration: star.animationDelay + "s",
+        };
+    };
+
+    // Get meteor style based on transition
+    const getMeteorStyle = (meteor: typeof METEOR_POOL[0], delay: number) => {
+        const baseStyle = {
+            top: meteor.y + "%",
+            left: meteor.x + "%",
+            width: meteor.size * 50 + "px",
+            height: meteor.size * 1 + "px",
+        };
+
+        if (isTransitioning && direction === 'to-light') {
+            return {
+                ...baseStyle,
+                animation: 'meteor-timelapse 0.8s ease-in-out forwards',
+            };
+        }
+
+        return {
+            ...baseStyle,
+            animationDelay: delay + "s",
+            animationDuration: meteor.duration + "s",
+        };
+    };
+
     return (<div className={cn("fixed inset-0",
         "overflow-hidden pointer-events-none z-0 bg-transparent",
+        "transition-opacity duration-500"
     )}>
         {stars.map((star) => (
             <div
                 key={star.id}
                 className={cn("absolute bg-white",
                     "rounded-full",
-                    "star animate-pulse-subtle"
+                    "star",
+                    !isTransitioning && "animate-pulse-subtle"
                 )}
-                style={{
-                    top: star.y + "%",
-                    left: star.x + "%",
-                    width: star.size + "px",
-                    height: star.size + "px",
-                    opacity: star.opacity,
-                    animation: star.animation,
-                    animationDuration: star.animationDelay + "s",
-                }}
+                style={getStarStyle(star)}
             />
         ))}
         {activeMeteors.map((active) => {
@@ -161,16 +209,11 @@ export const StarBackground = () => {
             return (
                 <div
                     key={active.key}
-                    className={cn("meteor animate-meteor", "rounded-full")}
-                    style={{
-                        top: meteor.y + "%",
-                        left: meteor.x + "%",
-                        width: meteor.size * 50 + "px",
-                        height: meteor.size * 1 + "px",
-                        animationDelay: active.delay + "s",
-                        animationDuration: meteor.duration + "s",
-                    }}
-                    onAnimationIteration={() => handleMeteorComplete(active.key)}
+                    className={cn("meteor", "rounded-full",
+                        !isTransitioning && "animate-meteor"
+                    )}
+                    style={getMeteorStyle(meteor, active.delay)}
+                    onAnimationIteration={isTransitioning ? undefined : () => handleMeteorComplete(active.key)}
                 />
             );
         })}
