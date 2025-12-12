@@ -51,23 +51,33 @@ export const StarBackground = () => {
     }
 
     const generateMeteors = () => {
-        const numberOfMeteors = 10;
+        const numberOfMeteors = 12;
 
         const newMeteors: Meteor[] = [];
         for (let i = 0; i < numberOfMeteors; i++) {
-            const meteor: Meteor = {
+            // Size distribution for natural variety
+            const sizeRand = Math.random();
+            let size: number;
+            if (sizeRand < 0.6) {
+                size = 1 + Math.random() * 1; // 60% small: 1-2px
+            } else if (sizeRand < 0.9) {
+                size = 2 + Math.random() * 2; // 30% medium: 2-4px
+            } else {
+                size = 4 + Math.random() * 2; // 10% large: 4-6px
+            }
+
+            newMeteors.push({
                 id: i,
-                size: Math.floor(Math.random() * Math.floor(Math.random() * 10)) + 1,
-                // Spawn from anywhere across screen width: x between 0 and 80%
-                x: Math.random() * 80,
-                // Spawn from top portion of screen: y between 0 and 20%
-                y: Math.random() * 20,
-                // More varied delay for unpredictable spawning: 0-20 seconds
-                delay: Math.random() * 20 + "s",
-                // Varied duration: 3-10 seconds
-                animationDuration: Math.random() * 7 + 3,
-            };
-            newMeteors.push(meteor);
+                size: size,
+                // Full width coverage including left side
+                x: Math.random() * 100,
+                // Top 30% for natural falling
+                y: Math.random() * 30,
+                // Staggered delays for natural appearance
+                delay: Math.random() * 30 + "s",
+                // Duration 2-6s
+                animationDuration: 2 + Math.random() * 4,
+            });
         }
         setMeteors(newMeteors);
     }
@@ -123,7 +133,8 @@ export const StarBackground = () => {
                     height: item.size * 1 + "px",
                     animationDelay: item.delay,
                     animationDuration: item.animationDuration + "s",
-                }} />
+                }}
+            />
             );
         })}
     </div>);
