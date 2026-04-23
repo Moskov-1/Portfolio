@@ -26,7 +26,8 @@ export const ContactSection = () => {
         const data = { name: formData.get("name"), email: formData.get("email"), message: formData.get("message") };
 
         try {
-            const webhookUrl = import.meta.env.VITE_CONTACT_WEBHOOK_URL as string;
+            const webhookUrl = import.meta.env.VITE_CONTACT_WEBHOOK_URL as string | undefined;
+            if (!webhookUrl) throw new Error("Webhook not configured");
             const response = await fetch(webhookUrl, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
