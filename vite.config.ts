@@ -21,8 +21,9 @@ export default defineConfig({
       output: {
         // Split vendor chunks so the browser can cache React separately from app code
         manualChunks: {
-          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
-          'ui-vendor':    ['lucide-react', '@radix-ui/react-toast'],
+          'react-vendor':  ['react', 'react-dom', 'react-router-dom'],
+          'motion-vendor': ['framer-motion'],
+          'ui-vendor':     ['lucide-react', '@radix-ui/react-toast'],
         },
       },
     },

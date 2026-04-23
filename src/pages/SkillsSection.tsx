@@ -1,44 +1,40 @@
 import { useState, useEffect, useRef, memo, useCallback } from "react";
+import { motion, AnimatePresence, LayoutGroup } from "framer-motion";
 import { cn } from "../lib/utils";
+import { fadeUp, cardPop, staggerSlow, staggerNormal, viewport } from "../lib/animations";
 
-// ─── Static data (module-level — never recreated) ─────────────────────────────
+// ─── Static data ──────────────────────────────────────────────────────────────
 
 const SKILLS = [
-    { name: "PHP",         levelZ: "Production++",          category: "Languages"   },
-    { name: "Python",      levelZ: "Production",            category: "Languages"   },
-    { name: "JavaScript",  levelZ: "Competent",             category: "Languages"   },
-    { name: "C++",         levelZ: "(DSA & Algorithms)++",  category: "Languages"   },
-    { name: "Lua",         levelZ: "Beginner",              category: "Languages"   },
-    { name: "Laravel",     levelZ: "Production++",          category: "Frameworks"  },
-    { name: "Django",      levelZ: "Production",            category: "Frameworks"  },
-    { name: "React",       levelZ: "Competent",             category: "Frameworks"  },
-    { name: "Docker",      levelZ: "Competent",             category: "DevOps"      },
-    { name: "EC2",         levelZ: "Competent",             category: "DevOps"      },
-    { name: "Linux",       levelZ: "Production",            category: "DevOps"      },
-    { name: "Git",         levelZ: "Competent",             category: "DevOps"      },
-    { name: "PyTorch",     levelZ: "Competent",             category: "Tools"       },
-    { name: "Scikit-Learn",levelZ: "Competent",             category: "Tools"       },
-    { name: "PostgreSQL",  levelZ: "Competent",             category: "Tools"       },
+    { name: "PHP",          levelZ: "Production++",         category: "Languages"  },
+    { name: "Python",       levelZ: "Production",           category: "Languages"  },
+    { name: "JavaScript",   levelZ: "Competent",            category: "Languages"  },
+    { name: "C++",          levelZ: "(DSA & Algorithms)++", category: "Languages"  },
+    { name: "Lua",          levelZ: "Beginner",             category: "Languages"  },
+    { name: "Laravel",      levelZ: "Production++",         category: "Frameworks" },
+    { name: "Django",       levelZ: "Production",           category: "Frameworks" },
+    { name: "React",        levelZ: "Competent",            category: "Frameworks" },
+    { name: "Docker",       levelZ: "Competent",            category: "DevOps"     },
+    { name: "EC2",          levelZ: "Competent",            category: "DevOps"     },
+    { name: "Linux",        levelZ: "Production",           category: "DevOps"     },
+    { name: "Git",          levelZ: "Competent",            category: "DevOps"     },
+    { name: "PyTorch",      levelZ: "Competent",            category: "Tools"      },
+    { name: "Scikit-Learn", levelZ: "Competent",            category: "Tools"      },
+    { name: "PostgreSQL",   levelZ: "Competent",            category: "Tools"      },
 ] as const;
 
 const TYPES = ["All", "Languages", "Frameworks", "DevOps", "Tools"] as const;
 
-// ─── SkillCard — CSS-driven animation, zero rAF loops ─────────────────────────
-//
-// Strategy: IntersectionObserver adds a class → CSS transitions the bar width.
-// The browser GPU-composites the width transition with no JS frame loops.
-// After 1.8 s we flip to showing the levelZ label.
+// ─── SkillCard — CSS-driven bar animation, zero rAF loops ─────────────────────
 
 const SkillCard = memo(({ skill }: { skill: typeof SKILLS[number] }) => {
     const [isVisible,  setIsVisible]  = useState(false);
     const [isComplete, setIsComplete] = useState(false);
     const cardRef = useRef<HTMLDivElement>(null);
 
-    // Observe once; unobserve after first intersection
     useEffect(() => {
         const card = cardRef.current;
         if (!card) return;
-
         const observer = new IntersectionObserver(
             ([entry]) => {
                 if (entry.isIntersecting) {
@@ -52,7 +48,6 @@ const SkillCard = memo(({ skill }: { skill: typeof SKILLS[number] }) => {
         return () => observer.unobserve(card);
     }, []);
 
-    // Single timer — fires once when animation should be done (1.5s bar + 0.3s pause)
     useEffect(() => {
         if (!isVisible) return;
         const timer = setTimeout(() => setIsComplete(true), 1800);
@@ -64,10 +59,8 @@ const SkillCard = memo(({ skill }: { skill: typeof SKILLS[number] }) => {
             <div className="text-left mb-4">
                 <h3 className="font-semibold text-lg">{skill.name}</h3>
             </div>
-
             {!isComplete ? (
                 <>
-                    {/* Width animates via CSS transition — no JS loop needed */}
                     <div className="w-full bg-secondary/50 h-2 rounded-full overflow-hidden">
                         <div
                             className="bg-primary h-2 rounded-full origin-left"
@@ -85,9 +78,14 @@ const SkillCard = memo(({ skill }: { skill: typeof SKILLS[number] }) => {
                     </div>
                 </>
             ) : (
-                <div className="text-left mt-4 animate-fade-in">
+                <motion.div
+                    className="text-left mt-4"
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4 }}
+                >
                     <p className="text-primary font-medium">{skill.levelZ}</p>
-                </div>
+                </motion.div>
             )}
         </div>
     );
@@ -110,31 +108,75 @@ export const SkillsSection = () => {
     return (
         <section id="skills" className="py-24 px-4 relative bg-secondary/30">
             <div className={cn("container mx-auto", "max-w-5xl")}>
-                <h2 className={cn("text-3xl md:text-4xl", "font-bold text-center mb-12")}>
+
+                {/* Heading */}
+                <motion.h2
+                    className={cn("text-3xl md:text-4xl", "font-bold text-center mb-12")}
+                    variants={fadeUp}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={viewport}
+                >
                     <span className="text-primary">My</span> Skills
-                </h2>
+                </motion.h2>
 
-                <div className="flex flex-wrap justify-center gap-4 mb-12">
-                    {TYPES.map(type => (
-                        <button
-                            key={type}
-                            onClick={() => handleCategory(type)}
-                            className={cn(
-                                "bg-card py-2 px-4 rounded-lg shadow-xs card-hover",
-                                category === type && "bg-primary text-primary-foreground"
-                            )}
-                        >
-                            {type}
-                        </button>
-                    ))}
-                </div>
+                {/* Filter buttons — stagger in, active indicator uses layoutId */}
+                <LayoutGroup>
+                    <motion.div
+                        className="flex flex-wrap justify-center gap-4 mb-12"
+                        variants={staggerNormal}
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={viewport}
+                    >
+                        {TYPES.map(type => (
+                            <motion.button
+                                key={type}
+                                onClick={() => handleCategory(type)}
+                                className={cn(
+                                    "relative bg-card py-2 px-4 rounded-lg shadow-xs overflow-hidden",
+                                    category === type && "text-primary-foreground"
+                                )}
+                                variants={fadeUp}
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                            >
+                                {/* Sliding background pill for active state */}
+                                {category === type && (
+                                    <motion.span
+                                        layoutId="active-pill"
+                                        className="absolute inset-0 bg-primary rounded-lg"
+                                        transition={{ type: "spring", stiffness: 380, damping: 32 }}
+                                    />
+                                )}
+                                <span className="relative z-10">{type}</span>
+                            </motion.button>
+                        ))}
+                    </motion.div>
+                </LayoutGroup>
 
-                <div className={cn("grid grid-cols-1 sm:grid-cols-2", "lg:grid-cols-3 gap-6")}>
-                    {filteredSkills.map(skill => (
-                        // skill.name is stable and unique — safe key for filtered lists
-                        <SkillCard key={skill.name} skill={skill} />
-                    ))}
-                </div>
+                {/* Skills grid — AnimatePresence for smooth card enter/exit on filter */}
+                <motion.div
+                    className={cn("grid grid-cols-1 sm:grid-cols-2", "lg:grid-cols-3 gap-6")}
+                    layout
+                >
+                    <AnimatePresence mode="popLayout">
+                        {filteredSkills.map(skill => (
+                            <motion.div
+                                key={skill.name}
+                                layout
+                                variants={cardPop}
+                                initial="hidden"
+                                animate="visible"
+                                exit="exit"
+                                whileHover={{ y: -4, transition: { duration: 0.2 } }}
+                            >
+                                <SkillCard skill={skill} />
+                            </motion.div>
+                        ))}
+                    </AnimatePresence>
+                </motion.div>
+
             </div>
         </section>
     );

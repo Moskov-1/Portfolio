@@ -6,6 +6,7 @@ import { useThemeTransition } from "../context/ThemeTransitionContext";
 const TRANSITION_DURATION = 1500;
 
 // Reads localStorage synchronously — no flicker/FOUC on load
+// Default is dark; respects any previously saved preference.
 function getInitialTheme(): "light" | "dark" {
     try {
         const saved = localStorage.getItem("theme");
@@ -13,7 +14,7 @@ function getInitialTheme(): "light" | "dark" {
     } catch {
         // localStorage unavailable (e.g. private browsing edge case)
     }
-    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    return "dark"; // dark by default
 }
 
 export const ThemeToggle = () => {

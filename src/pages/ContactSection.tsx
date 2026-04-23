@@ -1,31 +1,53 @@
-import { GitFork, LocateFixed, LucideNetwork, MailCheck, PhoneForwarded, Send } from "lucide-react"
-import { cn } from "../lib/utils"
+import { motion } from "framer-motion";
+import { GitFork, LocateFixed, LucideNetwork, MailCheck, PhoneForwarded, Send } from "lucide-react";
+import { cn } from "../lib/utils";
 import { useState } from "react";
 import { toast } from "../hooks/use-toast";
+import { fadeUp, slideLeft, slideRight, staggerNormal, viewport } from "../lib/animations";
+
+const contactInfo = [
+    {
+        icon: MailCheck,
+        label: "Email",
+        display: "raihanrony015@gmail.com",
+        href: "mailto:raihanrony015@gmail.com",
+    },
+    {
+        icon: PhoneForwarded,
+        label: "Phone",
+        display: "(+88)016017-94897",
+        href: "tel:+8801601794897",
+    },
+    {
+        icon: LocateFixed,
+        label: "Location",
+        display: "ECB, DHAKA - 1206",
+        href: "https://maps.google.com/?q=ECB+Chattar,+Dhaka+1206",
+        external: true,
+    },
+] as const;
 
 export const ContactSection = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
+
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-
         setIsSubmitting(true);
 
         const formData = new FormData(e.currentTarget);
         const data = {
-            name: formData.get('name'),
-            email: formData.get('email'),
-            message: formData.get('message'),
+            name:    formData.get("name"),
+            email:   formData.get("email"),
+            message: formData.get("message"),
         };
 
         try {
-        // Set VITE_CONTACT_WEBHOOK_URL in your .env file / Vercel env vars
-        const webhookUrl = import.meta.env.VITE_CONTACT_WEBHOOK_URL as string;
+            // Set VITE_CONTACT_WEBHOOK_URL in your .env file / Vercel env vars
+            const webhookUrl = import.meta.env.VITE_CONTACT_WEBHOOK_URL as string;
 
             const response = await fetch(webhookUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(data),
             });
 
@@ -36,9 +58,9 @@ export const ContactSection = () => {
                 });
                 e.currentTarget.reset();
             } else {
-                throw new Error('Failed to send message');
+                throw new Error("Failed to send message");
             }
-        } catch (error) {
+        } catch {
             toast({
                 title: "Error",
                 description: "Failed to send message. Please try again or email me directly.",
@@ -48,182 +70,173 @@ export const ContactSection = () => {
             setIsSubmitting(false);
         }
     };
-    return (
-        <section className="py-24 px-4 relative bg-secondary/30"
-            id='contact'>
-            <div className={cn("container mx-auto max-w-5xl")}>
-                <h2 className={cn("text-3xl md:text-4xl",
-                    'font-bold text-center mb-4'
-                )}>
-                    Get in <span className="text-primary">Touch</span>
-                </h2>
 
-                <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
-                    If you have any questions or would like to work together, please don't hesitate to reach out.
-                    I'm always open to new opportunities and collaborations.
-                </p>
+    return (
+        <section className="py-24 px-4 relative bg-secondary/30" id="contact">
+            <div className={cn("container mx-auto max-w-5xl")}>
+
+                {/* Heading */}
+                <motion.div
+                    variants={fadeUp}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={viewport}
+                    className="text-center mb-12"
+                >
+                    <h2 className={cn("text-3xl md:text-4xl", "font-bold mb-4")}>
+                        Get in <span className="text-primary">Touch</span>
+                    </h2>
+                    <p className="text-muted-foreground max-w-2xl mx-auto">
+                        If you have any questions or would like to work together, please don't hesitate to reach out.
+                        I'm always open to new opportunities and collaborations.
+                    </p>
+                </motion.div>
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-                    <div className="space-y-8">
-                        <h3 className="text-2xl font-semibold mb-6">
+
+                    {/* Left — contact info slides from left */}
+                    <motion.div
+                        className="space-y-8"
+                        variants={staggerNormal}
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={viewport}
+                    >
+                        <motion.h3 className="text-2xl font-semibold" variants={slideLeft}>
                             Contact Info
-                        </h3>
-                        <div className="space-y-5 justify-center">
-                            <div className="flex items-start space-x-4">
-                                <div className="p-3 rounded-full bg-primary/10">
-                                    <MailCheck className="h-6 w-6 text-primary" />
-                                    {" "}
-                                </div>
-                                <div >
-                                    <h4 className="font-medium">
-                                        Email
-                                    </h4>
-                                    <a href="mailto:raihanrony015@gmail.com"
-                                        className={cn("text-muted-foreground hover:text-primary",
-                                            'transition-colors duration-300'
-                                        )}
+                        </motion.h3>
+
+                        <div className="space-y-5">
+                            {contactInfo.map(({ icon: Icon, label, display, href, external }) => (
+                                <motion.div
+                                    key={label}
+                                    className="flex items-start space-x-4"
+                                    variants={slideLeft}
+                                >
+                                    <motion.div
+                                        className="p-3 rounded-full bg-primary/10 shrink-0"
+                                        whileHover={{ scale: 1.15, rotate: 8 }}
+                                        transition={{ type: "spring", stiffness: 300 }}
                                     >
-                                        raihanrony015@gmail.com
-                                    </a>
-                                </div>
-                            </div>
-                            <div className="flex items-start space-x-4">
-                                <div className="p-3 rounded-full bg-primary/10">
-                                    <PhoneForwarded className="h-6 w-6 text-primary" />
-                                    {" "}
-                                </div>
-                                <div >
-                                    <h4 className="font-medium">
-                                        Phone
-                                    </h4>
-                                    <a href="tel:+8801601794897"
-                                        className={cn("text-muted-foreground hover:text-primary",
-                                            'transition-colors duration-300'
-                                        )}
-                                    >
-                                        (+88)016017-94897
-                                    </a>
-                                </div>
-                            </div>
-                            <div className="flex items-start space-x-4">
-                                <div className="p-3 rounded-full bg-primary/10">
-                                    <LocateFixed className="h-6 w-6 text-primary" />
-                                    {" "}
-                                </div>
-                                <div >
-                                    <h4 className="font-medium">
-                                        Location
-                                    </h4>
-                                    <a
-                                        href="https://maps.google.com/?q=ECB+Chattar,+Dhaka+1206"
+                                        <Icon className="h-6 w-6 text-primary" />
+                                    </motion.div>
+                                    <div>
+                                        <h4 className="font-medium">{label}</h4>
+                                        <a
+                                            href={href}
+                                            {...(external
+                                                ? { target: "_blank", rel: "noopener noreferrer" }
+                                                : {})}
+                                            className={cn(
+                                                "text-muted-foreground hover:text-primary",
+                                                "transition-colors duration-300"
+                                            )}
+                                        >
+                                            {display}
+                                        </a>
+                                    </div>
+                                </motion.div>
+                            ))}
+                        </div>
+
+                        {/* Social links */}
+                        <motion.div className="pt-4" variants={slideLeft}>
+                            <h4 className="mb-4 font-medium">Follow Me</h4>
+                            <div className="flex space-x-4">
+                                {[
+                                    { href: "https://www.linkedin.com/in/raihan-rony-a461121a1/", icon: LucideNetwork, label: "LinkedIn" },
+                                    { href: "https://github.com/Moskov-1",                         icon: GitFork,       label: "GitHub"   },
+                                ].map(({ href, icon: Icon, label }) => (
+                                    <motion.a
+                                        key={label}
+                                        href={href}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className={cn("text-muted-foreground hover:text-primary",
-                                            'transition-colors duration-300'
-                                        )}
+                                        aria-label={label}
+                                        whileHover={{ scale: 1.15, y: -3 }}
+                                        whileTap={{ scale: 0.9 }}
                                     >
-                                        ECB, DHAKA - 1206
-                                    </a>
-                                </div>
+                                        <div className="p-3 rounded-full bg-primary/10">
+                                            <Icon className="h-6 w-6 text-primary" />
+                                        </div>
+                                    </motion.a>
+                                ))}
                             </div>
-                        </div>
-                        <div className="pt-8">
-                            <h4>Follow Me</h4>
-                            {/* <div className="flex space-x-4 justify-center">
-                            <a href="">
-                                <div className="p-3 rounded-full bg-primary/10">
-                                    <Phone className="h-6 w-6 text-primary"/>
-                                    {" "}
-                                </div>
-                            </a>
-                        </div> */}
-                            <div className="flex space-x-4 justify-center">
-                                <a href="https://www.linkedin.com/in/raihan-rony-a461121a1/" target="_blank">
-                                    <div className="p-3 rounded-full bg-primary/10">
-                                        <LucideNetwork className="h-6 w-6 text-primary" />
-                                        {" "}
-                                    </div>
-                                </a>
-                                <a href="https://github.com/Moskov-1" target="_blank">
-                                    <div className="p-3 rounded-full bg-primary/10">
-                                        <GitFork className="h-6 w-6 text-primary" />
-                                        {" "}
-                                    </div>
-                                </a>
+                        </motion.div>
+                    </motion.div>
 
-                            </div>
-                        </div>
-                    </div>
-                    <div className="bg-card p-8 rounded-lg shadow-xs">
-                        <h3 className="text-2xl font-semibold mb-6">
-                            Send a Message
-                        </h3>
+                    {/* Right — form slides from right */}
+                    <motion.div
+                        className="bg-card p-8 rounded-lg shadow-xs"
+                        variants={slideRight}
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={viewport}
+                    >
+                        <h3 className="text-2xl font-semibold mb-6">Send a Message</h3>
                         <form className="space-y-6" onSubmit={handleSubmit}>
-                            <div>
-                                <label
-                                    htmlFor="name"
-                                    className="block text-sm font-medium mb-2"
+                            {[
+                                { id: "name",    label: "Your Name",    type: "text",  placeholder: "Pedro Machado…"           },
+                                { id: "email",   label: "Your Email",   type: "email", placeholder: "john@gmail.com"            },
+                            ].map(({ id, label, type, placeholder }) => (
+                                <motion.div
+                                    key={id}
+                                    whileFocus={{ scale: 1.01 }}
                                 >
-                                    {" "}
-                                    Your Name
-                                </label>
-                                <input
-                                    type="text"
-                                    id="name"
-                                    name="name"
-                                    required
-                                    className="w-full px-4 py-3 rounded-md border border-input bg-background focus:outline-hidden foucs:ring-2 focus:ring-primary"
-                                    placeholder="Pedro Machado..."
-                                />
-                            </div>
+                                    <label htmlFor={id} className="block text-sm font-medium mb-2">
+                                        {label}
+                                    </label>
+                                    <input
+                                        type={type}
+                                        id={id}
+                                        name={id}
+                                        required
+                                        className="w-full px-4 py-3 rounded-md border border-input bg-background focus:outline-hidden focus:ring-2 focus:ring-primary transition-shadow duration-200"
+                                        placeholder={placeholder}
+                                    />
+                                </motion.div>
+                            ))}
 
                             <div>
-                                <label
-                                    htmlFor="email"
-                                    className="block text-sm font-medium mb-2"
-                                >
-                                    {" "}
-                                    Your Email
-                                </label>
-                                <input
-                                    type="email"
-                                    id="email"
-                                    name="email"
-                                    required
-                                    className="w-full px-4 py-3 rounded-md border border-input bg-background focus:outline-hidden foucs:ring-2 focus:ring-primary"
-                                    placeholder="john@gmail.com"
-                                />
-                            </div>
-
-                            <div>
-                                <label
-                                    htmlFor="message"
-                                    className="block text-sm font-medium mb-2"
-                                >
-                                    {" "}
+                                <label htmlFor="message" className="block text-sm font-medium mb-2">
                                     Your Message
                                 </label>
                                 <textarea
                                     id="message"
                                     name="message"
                                     required
-                                    className="w-full px-4 py-3 rounded-md border border-input bg-background focus:outline-hidden foucs:ring-2 focus:ring-primary resize-none"
-                                    placeholder="Hello, I'd like to talk about..."
+                                    rows={4}
+                                    className="w-full px-4 py-3 rounded-md border border-input bg-background focus:outline-hidden focus:ring-2 focus:ring-primary resize-none transition-shadow duration-200"
+                                    placeholder="Hello, I'd like to talk about…"
                                 />
                             </div>
 
-                            <button
+                            <motion.button
                                 type="submit"
                                 disabled={isSubmitting}
-                                className={cn(
-                                    "space-btn w-full flex items-center justify-center gap-2"
-                                )}
+                                className={cn("space-btn w-full flex items-center justify-center gap-2")}
+                                whileHover={{ scale: 1.02, y: -1 }}
+                                whileTap={{ scale: 0.98 }}
                             >
-                                {isSubmitting ? "Sending..." : "Send Message"}
-                                <Send size={16} />
-                            </button>
+                                {isSubmitting ? "Sending…" : "Send Message"}
+                                <motion.span
+                                    animate={isSubmitting
+                                        ? { rotate: 360 }
+                                        : { x: [0, 3, 0] }
+                                    }
+                                    transition={isSubmitting
+                                        ? { repeat: Infinity, duration: 0.8, ease: "linear" }
+                                        : { repeat: Infinity, duration: 1.5, ease: "easeInOut" }
+                                    }
+                                >
+                                    <Send size={16} />
+                                </motion.span>
+                            </motion.button>
                         </form>
-                    </div>
+                    </motion.div>
+
                 </div>
             </div>
-        </section>)
-}
+        </section>
+    );
+};
