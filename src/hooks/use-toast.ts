@@ -166,7 +166,7 @@ function useToast() {
                 listeners.splice(index, 1);
             }
         };
-    }, [state]);
+    }, []); // [] — setState is stable, state is not used inside the effect
 
     return {
         ...state,

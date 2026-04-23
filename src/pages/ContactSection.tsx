@@ -18,8 +18,8 @@ export const ContactSection = () => {
         };
 
         try {
-            // Replace with your actual webhook URL
-            const webhookUrl = 'https://your-webhook-url.com/contact';
+        // Set VITE_CONTACT_WEBHOOK_URL in your .env file / Vercel env vars
+        const webhookUrl = import.meta.env.VITE_CONTACT_WEBHOOK_URL as string;
 
             const response = await fetch(webhookUrl, {
                 method: 'POST',
@@ -113,7 +113,10 @@ export const ContactSection = () => {
                                     <h4 className="font-medium">
                                         Location
                                     </h4>
-                                    <a href="mailto:raihanrony015@gmail.com"
+                                    <a
+                                        href="https://maps.google.com/?q=ECB+Chattar,+Dhaka+1206"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
                                         className={cn("text-muted-foreground hover:text-primary",
                                             'transition-colors duration-300'
                                         )}

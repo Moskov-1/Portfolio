@@ -14,4 +14,17 @@ export default defineConfig({
       '@': path.resolve(__dirname, 'src'),
     },
   },
+  build: {
+    // Inline assets smaller than 4 KB (saves round-trips)
+    assetsInlineLimit: 4096,
+    rollupOptions: {
+      output: {
+        // Split vendor chunks so the browser can cache React separately from app code
+        manualChunks: {
+          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+          'ui-vendor':    ['lucide-react', '@radix-ui/react-toast'],
+        },
+      },
+    },
+  },
 })
