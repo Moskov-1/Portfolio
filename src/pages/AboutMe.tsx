@@ -1,32 +1,12 @@
 import { motion } from "framer-motion";
 import { BriefcaseBusiness, Code, User } from "lucide-react";
 import { cn } from "../lib/utils";
-import {
-    fadeUp,
-    slideLeft,
-    slideRight,
-    scaleIn,
-    staggerNormal,
-    staggerSlow,
-    viewport,
-} from "../lib/animations";
+import { fadeUp, slideLeft, slideRight, staggerNormal, staggerSlow, viewport } from "../lib/animations";
 
 const cards = [
-    {
-        icon: Code,
-        title: "Backend Engineer",
-        subtitle: "March 2025 – Present",
-    },
-    {
-        icon: User,
-        title: "Freelance Developer",
-        subtitle: "2024 – Present",
-    },
-    {
-        icon: BriefcaseBusiness,
-        title: "Open to Opportunities",
-        subtitle: "Available for hire",
-    },
+    { icon: Code,             title: "Backend Engineer",       subtitle: "March 2025 – Present" },
+    { icon: User,             title: "Freelance Developer",    subtitle: "2024 – Present"        },
+    { icon: BriefcaseBusiness,title: "Open to Opportunities",  subtitle: "Available for hire"    },
 ] as const;
 
 export const AboutMe = () => {
@@ -34,7 +14,6 @@ export const AboutMe = () => {
         <div id="about" className="py-24 px-4 relative">
             <div className={cn("container mx-auto", "max-w-5xl")}>
 
-                {/* Section heading fades up */}
                 <motion.h2
                     className={cn("text-3xl mb-12", "md:text-4xl font-bold text-center")}
                     variants={fadeUp}
@@ -47,7 +26,6 @@ export const AboutMe = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
 
-                    {/* Left column slides in from the left */}
                     <motion.div
                         className="space-y-6"
                         variants={staggerNormal}
@@ -63,35 +41,27 @@ export const AboutMe = () => {
                             experience in web development, I specialize in performance-based systems.
                             My goal is to build robust, scalable back-ends and automate tasks to keep production running.
                         </motion.p>
-
                         <motion.div
                             className={cn("flex flex-col", "sm:flex-row gap-4 justify-center")}
                             variants={slideLeft}
                         >
-                            <motion.a
-                                href="#contact"
-                                className="space-btn"
-                                whileHover={{ scale: 1.05, y: -2 }}
-                                whileTap={{ scale: 0.97 }}
-                            >
+                            {/* CSS hover — no motion wrapper needed for simple scale */}
+                            <a href="#contact" className="space-btn transition-transform hover:scale-105 hover:-translate-y-0.5 active:scale-95">
                                 Contact Me
-                            </motion.a>
-                            <motion.a
+                            </a>
+                            <a
                                 href="#contact"
                                 className={cn(
-                                    "px-6 py-2 rounded-full border",
-                                    "border-primary text-primary hover:bg-primary/10",
-                                    "transition-colors duration-300"
+                                    "px-6 py-2 rounded-full border border-primary text-primary",
+                                    "hover:bg-primary/10 transition-colors duration-300",
+                                    "hover:scale-105 hover:-translate-y-0.5 active:scale-95 transition-transform"
                                 )}
-                                whileHover={{ scale: 1.05, y: -2 }}
-                                whileTap={{ scale: 0.97 }}
                             >
                                 My CV
-                            </motion.a>
+                            </a>
                         </motion.div>
                     </motion.div>
 
-                    {/* Right column — cards stagger in from the right */}
                     <motion.div
                         className="grid grid-cols-1 gap-6"
                         variants={staggerSlow}
@@ -102,18 +72,14 @@ export const AboutMe = () => {
                         {cards.map(({ icon: Icon, title, subtitle }) => (
                             <motion.div
                                 key={title}
-                                className="gradient-border p-6 card-hover"
+                                className="gradient-border p-6 card-hover group"
                                 variants={slideRight}
-                                whileHover={{ x: 6, transition: { duration: 0.2 } }}
                             >
                                 <div className="flex items-start gap-4">
-                                    <motion.div
-                                        className="p-3 rounded-full bg-primary/10"
-                                        whileHover={{ rotate: 10, scale: 1.1 }}
-                                        transition={{ type: "spring", stiffness: 300 }}
-                                    >
+                                    {/* CSS group-hover rotation — no motion instance */}
+                                    <div className="p-3 rounded-full bg-primary/10 transition-transform duration-300 group-hover:rotate-6 group-hover:scale-110">
                                         <Icon className="h-6 w-6 text-primary" />
-                                    </motion.div>
+                                    </div>
                                     <div className="text-left">
                                         <h4 className="font-semibold text-lg">{title}</h4>
                                         <p className="text-muted-foreground">{subtitle}</p>

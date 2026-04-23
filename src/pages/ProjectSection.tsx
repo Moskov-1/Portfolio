@@ -2,8 +2,6 @@ import { motion } from "framer-motion";
 import { ArrowRight, ExternalLink, GitFork } from "lucide-react";
 import { fadeUp, staggerSlow, cardPop, viewport } from "../lib/animations";
 
-// ─── Static data ──────────────────────────────────────────────────────────────
-
 const projects = [
     {
         title:  "Project 1",
@@ -31,14 +29,11 @@ const projects = [
     },
 ] as const;
 
-// ─── Component ────────────────────────────────────────────────────────────────
-
 export const ProjectSection = () => {
     return (
         <section id="projects" className="py-24 px-4 relative">
             <div className="container mx-auto max-w-5xl">
 
-                {/* Section header */}
                 <motion.div
                     variants={fadeUp}
                     initial="hidden"
@@ -54,7 +49,6 @@ export const ProjectSection = () => {
                     </p>
                 </motion.div>
 
-                {/* Project cards — stagger in on scroll */}
                 <motion.div
                     className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12"
                     variants={staggerSlow}
@@ -66,11 +60,9 @@ export const ProjectSection = () => {
                         <motion.div
                             key={project.title}
                             variants={cardPop}
-                            whileHover={{ y: -8, transition: { duration: 0.25, ease: "easeOut" } }}
-                            className="group bg-card rounded-lg overflow-hidden shadow-xs"
-                            style={{ boxShadow: "0 0 0 1px hsl(var(--border))" }}
+                            // CSS hover: no JS pointer listener needed for a simple lift
+                            className="group bg-card rounded-lg overflow-hidden shadow-xs border border-border transition-transform duration-300 hover:-translate-y-2"
                         >
-                            {/* Image with scale on group hover via CSS */}
                             <div className="h-48 overflow-hidden">
                                 <img
                                     src={project.image}
@@ -82,51 +74,40 @@ export const ProjectSection = () => {
                             </div>
 
                             <div className="p-6">
-                                {/* Tags */}
                                 <div className="flex flex-wrap gap-2 mb-4">
                                     {project.tags.map(tag => (
-                                        <span
-                                            key={tag}
-                                            className="bg-primary/20 text-primary rounded-md px-2 py-1 text-sm font-medium"
-                                        >
+                                        <span key={tag} className="bg-primary/20 text-primary rounded-md px-2 py-1 text-sm font-medium">
                                             {tag}
                                         </span>
                                     ))}
                                 </div>
-
                                 <h3 className="text-xl font-semibold mb-1">{project.title}</h3>
                                 <p className="text-muted-foreground text-sm mb-4">{project.text}</p>
 
-                                <div className="flex justify-between items-center">
-                                    <div className="flex space-x-3">
-                                        <motion.a
-                                            href={project.link}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            whileHover={{ scale: 1.2, color: "hsl(var(--primary))" }}
-                                            whileTap={{ scale: 0.9 }}
-                                            className="text-foreground/80 hover:text-primary transition-colors duration-300"
-                                        >
-                                            <ExternalLink size={20} />
-                                        </motion.a>
-                                        <motion.a
-                                            href={project.github}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            whileHover={{ scale: 1.2, color: "hsl(var(--primary))" }}
-                                            whileTap={{ scale: 0.9 }}
-                                            className="text-foreground/80 hover:text-primary transition-colors duration-300"
-                                        >
-                                            <GitFork size={20} />
-                                        </motion.a>
-                                    </div>
+                                <div className="flex space-x-3">
+                                    {/* CSS hover scale — no motion wrapper */}
+                                    <a
+                                        href={project.link}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-foreground/80 hover:text-primary hover:scale-125 transition-all duration-200"
+                                    >
+                                        <ExternalLink size={20} />
+                                    </a>
+                                    <a
+                                        href={project.github}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-foreground/80 hover:text-primary hover:scale-125 transition-all duration-200"
+                                    >
+                                        <GitFork size={20} />
+                                    </a>
                                 </div>
                             </div>
                         </motion.div>
                     ))}
                 </motion.div>
 
-                {/* GitHub CTA */}
                 <motion.div
                     className="text-center mt-12"
                     variants={fadeUp}
@@ -134,22 +115,16 @@ export const ProjectSection = () => {
                     whileInView="visible"
                     viewport={viewport}
                 >
-                    <motion.a
+                    <a
                         href="https://github.com/Moskov-1"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="space-btn w-fit flex items-center mx-auto gap-2"
-                        whileHover={{ scale: 1.05, y: -2 }}
-                        whileTap={{ scale: 0.97 }}
+                        className="space-btn w-fit inline-flex items-center mx-auto gap-2 hover:scale-105 hover:-translate-y-0.5 transition-transform active:scale-95"
                     >
                         My Github
-                        <motion.span
-                            animate={{ x: [0, 4, 0] }}
-                            transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
-                        >
-                            <ArrowRight size={16} />
-                        </motion.span>
-                    </motion.a>
+                        {/* CSS animation — no motion instance, no JS timer */}
+                        <ArrowRight size={16} className="animate-[nudge_1.5s_ease-in-out_infinite]" />
+                    </a>
                 </motion.div>
 
             </div>

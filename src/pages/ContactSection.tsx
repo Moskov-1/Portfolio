@@ -6,25 +6,14 @@ import { toast } from "../hooks/use-toast";
 import { fadeUp, slideLeft, slideRight, staggerNormal, viewport } from "../lib/animations";
 
 const contactInfo = [
-    {
-        icon: MailCheck,
-        label: "Email",
-        display: "raihanrony015@gmail.com",
-        href: "mailto:raihanrony015@gmail.com",
-    },
-    {
-        icon: PhoneForwarded,
-        label: "Phone",
-        display: "(+88)016017-94897",
-        href: "tel:+8801601794897",
-    },
-    {
-        icon: LocateFixed,
-        label: "Location",
-        display: "ECB, DHAKA - 1206",
-        href: "https://maps.google.com/?q=ECB+Chattar,+Dhaka+1206",
-        external: true,
-    },
+    { icon: MailCheck,      label: "Email",    display: "raihanrony015@gmail.com",  href: "mailto:raihanrony015@gmail.com",                           external: false },
+    { icon: PhoneForwarded, label: "Phone",    display: "(+88)016017-94897",         href: "tel:+8801601794897",                                        external: false },
+    { icon: LocateFixed,    label: "Location", display: "ECB, DHAKA - 1206",         href: "https://maps.google.com/?q=ECB+Chattar,+Dhaka+1206",       external: true  },
+] as const;
+
+const socials = [
+    { href: "https://www.linkedin.com/in/raihan-rony-a461121a1/", icon: LucideNetwork, label: "LinkedIn" },
+    { href: "https://github.com/Moskov-1",                         icon: GitFork,       label: "GitHub"   },
 ] as const;
 
 export const ContactSection = () => {
@@ -33,39 +22,22 @@ export const ContactSection = () => {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setIsSubmitting(true);
-
         const formData = new FormData(e.currentTarget);
-        const data = {
-            name:    formData.get("name"),
-            email:   formData.get("email"),
-            message: formData.get("message"),
-        };
+        const data = { name: formData.get("name"), email: formData.get("email"), message: formData.get("message") };
 
         try {
-            // Set VITE_CONTACT_WEBHOOK_URL in your .env file / Vercel env vars
             const webhookUrl = import.meta.env.VITE_CONTACT_WEBHOOK_URL as string;
-
             const response = await fetch(webhookUrl, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(data),
             });
-
             if (response.ok) {
-                toast({
-                    title: "Message sent!",
-                    description: "Thank you for your message. I'll get back to you soon.",
-                });
+                toast({ title: "Message sent!", description: "Thank you! I'll get back to you soon." });
                 e.currentTarget.reset();
-            } else {
-                throw new Error("Failed to send message");
-            }
+            } else throw new Error();
         } catch {
-            toast({
-                title: "Error",
-                description: "Failed to send message. Please try again or email me directly.",
-                variant: "destructive",
-            });
+            toast({ title: "Error", description: "Failed to send. Please email me directly.", variant: "destructive" });
         } finally {
             setIsSubmitting(false);
         }
@@ -73,17 +45,10 @@ export const ContactSection = () => {
 
     return (
         <section className="py-24 px-4 relative bg-secondary/30" id="contact">
-            <div className={cn("container mx-auto max-w-5xl")}>
+            <div className="container mx-auto max-w-5xl">
 
-                {/* Heading */}
-                <motion.div
-                    variants={fadeUp}
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={viewport}
-                    className="text-center mb-12"
-                >
-                    <h2 className={cn("text-3xl md:text-4xl", "font-bold mb-4")}>
+                <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={viewport} className="text-center mb-12">
+                    <h2 className="text-3xl md:text-4xl font-bold mb-4">
                         Get in <span className="text-primary">Touch</span>
                     </h2>
                     <p className="text-muted-foreground max-w-2xl mx-auto">
@@ -94,43 +59,23 @@ export const ContactSection = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
 
-                    {/* Left — contact info slides from left */}
-                    <motion.div
-                        className="space-y-8"
-                        variants={staggerNormal}
-                        initial="hidden"
-                        whileInView="visible"
-                        viewport={viewport}
-                    >
-                        <motion.h3 className="text-2xl font-semibold" variants={slideLeft}>
-                            Contact Info
-                        </motion.h3>
+                    {/* Left — slides from left */}
+                    <motion.div className="space-y-8" variants={staggerNormal} initial="hidden" whileInView="visible" viewport={viewport}>
+                        <motion.h3 className="text-2xl font-semibold" variants={slideLeft}>Contact Info</motion.h3>
 
                         <div className="space-y-5">
                             {contactInfo.map(({ icon: Icon, label, display, href, external }) => (
-                                <motion.div
-                                    key={label}
-                                    className="flex items-start space-x-4"
-                                    variants={slideLeft}
-                                >
-                                    <motion.div
-                                        className="p-3 rounded-full bg-primary/10 shrink-0"
-                                        whileHover={{ scale: 1.15, rotate: 8 }}
-                                        transition={{ type: "spring", stiffness: 300 }}
-                                    >
+                                <motion.div key={label} className="flex items-start space-x-4" variants={slideLeft}>
+                                    {/* CSS group-hover — no motion instance */}
+                                    <div className="p-3 rounded-full bg-primary/10 shrink-0 transition-transform duration-300 hover:scale-110 hover:rotate-6">
                                         <Icon className="h-6 w-6 text-primary" />
-                                    </motion.div>
+                                    </div>
                                     <div>
                                         <h4 className="font-medium">{label}</h4>
                                         <a
                                             href={href}
-                                            {...(external
-                                                ? { target: "_blank", rel: "noopener noreferrer" }
-                                                : {})}
-                                            className={cn(
-                                                "text-muted-foreground hover:text-primary",
-                                                "transition-colors duration-300"
-                                            )}
+                                            {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                                            className="text-muted-foreground hover:text-primary transition-colors duration-300"
                                         >
                                             {display}
                                         </a>
@@ -139,33 +84,26 @@ export const ContactSection = () => {
                             ))}
                         </div>
 
-                        {/* Social links */}
                         <motion.div className="pt-4" variants={slideLeft}>
                             <h4 className="mb-4 font-medium">Follow Me</h4>
                             <div className="flex space-x-4">
-                                {[
-                                    { href: "https://www.linkedin.com/in/raihan-rony-a461121a1/", icon: LucideNetwork, label: "LinkedIn" },
-                                    { href: "https://github.com/Moskov-1",                         icon: GitFork,       label: "GitHub"   },
-                                ].map(({ href, icon: Icon, label }) => (
-                                    <motion.a
+                                {socials.map(({ href, icon: Icon, label }) => (
+                                    <a
                                         key={label}
                                         href={href}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         aria-label={label}
-                                        whileHover={{ scale: 1.15, y: -3 }}
-                                        whileTap={{ scale: 0.9 }}
+                                        className="p-3 rounded-full bg-primary/10 hover:-translate-y-1 hover:scale-110 transition-transform duration-200"
                                     >
-                                        <div className="p-3 rounded-full bg-primary/10">
-                                            <Icon className="h-6 w-6 text-primary" />
-                                        </div>
-                                    </motion.a>
+                                        <Icon className="h-6 w-6 text-primary" />
+                                    </a>
                                 ))}
                             </div>
                         </motion.div>
                     </motion.div>
 
-                    {/* Right — form slides from right */}
+                    {/* Right — slides from right */}
                     <motion.div
                         className="bg-card p-8 rounded-lg shadow-xs"
                         variants={slideRight}
@@ -176,62 +114,45 @@ export const ContactSection = () => {
                         <h3 className="text-2xl font-semibold mb-6">Send a Message</h3>
                         <form className="space-y-6" onSubmit={handleSubmit}>
                             {[
-                                { id: "name",    label: "Your Name",    type: "text",  placeholder: "Pedro Machado…"           },
-                                { id: "email",   label: "Your Email",   type: "email", placeholder: "john@gmail.com"            },
+                                { id: "name",  label: "Your Name",  type: "text",  placeholder: "Pedro Machado…" },
+                                { id: "email", label: "Your Email", type: "email", placeholder: "john@gmail.com"  },
                             ].map(({ id, label, type, placeholder }) => (
-                                <motion.div
-                                    key={id}
-                                    whileFocus={{ scale: 1.01 }}
-                                >
-                                    <label htmlFor={id} className="block text-sm font-medium mb-2">
-                                        {label}
-                                    </label>
+                                <div key={id}>
+                                    <label htmlFor={id} className="block text-sm font-medium mb-2">{label}</label>
                                     <input
-                                        type={type}
-                                        id={id}
-                                        name={id}
-                                        required
+                                        type={type} id={id} name={id} required
                                         className="w-full px-4 py-3 rounded-md border border-input bg-background focus:outline-hidden focus:ring-2 focus:ring-primary transition-shadow duration-200"
                                         placeholder={placeholder}
                                     />
-                                </motion.div>
+                                </div>
                             ))}
 
                             <div>
-                                <label htmlFor="message" className="block text-sm font-medium mb-2">
-                                    Your Message
-                                </label>
+                                <label htmlFor="message" className="block text-sm font-medium mb-2">Your Message</label>
                                 <textarea
-                                    id="message"
-                                    name="message"
-                                    required
-                                    rows={4}
+                                    id="message" name="message" required rows={4}
                                     className="w-full px-4 py-3 rounded-md border border-input bg-background focus:outline-hidden focus:ring-2 focus:ring-primary resize-none transition-shadow duration-200"
                                     placeholder="Hello, I'd like to talk about…"
                                 />
                             </div>
 
-                            <motion.button
+                            <button
                                 type="submit"
                                 disabled={isSubmitting}
-                                className={cn("space-btn w-full flex items-center justify-center gap-2")}
-                                whileHover={{ scale: 1.02, y: -1 }}
-                                whileTap={{ scale: 0.98 }}
+                                className={cn(
+                                    "space-btn w-full flex items-center justify-center gap-2",
+                                    "hover:scale-[1.02] hover:-translate-y-0.5 active:scale-[0.98] transition-transform"
+                                )}
                             >
                                 {isSubmitting ? "Sending…" : "Send Message"}
-                                <motion.span
-                                    animate={isSubmitting
-                                        ? { rotate: 360 }
-                                        : { x: [0, 3, 0] }
+                                <Send
+                                    size={16}
+                                    className={isSubmitting
+                                        ? "animate-spin"
+                                        : "animate-[nudge_1.5s_ease-in-out_infinite]"
                                     }
-                                    transition={isSubmitting
-                                        ? { repeat: Infinity, duration: 0.8, ease: "linear" }
-                                        : { repeat: Infinity, duration: 1.5, ease: "easeInOut" }
-                                    }
-                                >
-                                    <Send size={16} />
-                                </motion.span>
-                            </motion.button>
+                                />
+                            </button>
                         </form>
                     </motion.div>
 
