@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, memo, useCallback } from "react";
 import { motion, AnimatePresence, LayoutGroup } from "framer-motion";
 import { cn } from "../lib/utils";
-import { fadeUp, cardPop, staggerSlow, staggerNormal, viewport } from "../lib/animations";
+import { fadeUp, cardPop, staggerNormal, viewport } from "../lib/animations";
 
 // ─── Static data ──────────────────────────────────────────────────────────────
 
