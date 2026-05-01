@@ -24,14 +24,14 @@ type Meteor = {
 
 // ─── Meteor trajectory (matches original CSS: rotate(215deg) translateX) ──────
 
-const ANGLE = 215 * (Math.PI / 180);
-const COS_A = Math.cos(ANGLE); // ≈ -0.819
-const SIN_A = Math.sin(ANGLE); // ≈ -0.574
+const ANGLE = 35 * (Math.PI / 180); // Equivalent to rotate(215deg) moving in negative X direction
+const COS_A = Math.cos(ANGLE); // ≈ 0.819
+const SIN_A = Math.sin(ANGLE); // ≈ 0.574
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 const MAX_STARS    = 150;
-const METEOR_COUNT = 4;
+const METEOR_COUNT = 8;
 
 function makeStars(w: number, h: number): Star[] {
     const n = Math.min(Math.floor((w * h) / 6000), MAX_STARS);
@@ -54,8 +54,8 @@ function makeMeteors(w: number, h: number): Meteor[] {
         width:     1   + Math.random() * 2,
         progress:  0,
         maxTravel: 700 + Math.random() * 200,
-        waiting:   i * 3,           // stagger initial start
-        waitFor:   2 + Math.random() * 3,
+        waiting:   i * 2,           // stagger initial start
+        waitFor:   1.5 + Math.random() * 2.5,
     }));
 }
 

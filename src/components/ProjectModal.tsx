@@ -37,6 +37,15 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, [lightboxIndex, onClose]);
 
+    // Body scroll lock
+    useEffect(() => {
+        if (!project) return;
+        document.body.style.overflow = "hidden";
+        return () => {
+            document.body.style.overflow = "auto";
+        };
+    }, [project]);
+
     if (!project) return null;
 
     const images = project.images && project.images.length > 0 
@@ -56,14 +65,6 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
             setLightboxIndex((lightboxIndex - 1 + images.length) % images.length);
         }
     };
-
-    // Body scroll lock
-    useEffect(() => {
-        document.body.style.overflow = "hidden";
-        return () => {
-            document.body.style.overflow = "auto";
-        };
-    }, []);
 
     return (
         <AnimatePresence>
