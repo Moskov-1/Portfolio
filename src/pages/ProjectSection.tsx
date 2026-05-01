@@ -4,6 +4,7 @@ import { fadeUp, staggerSlow, cardPop, viewport } from "../lib/animations";
 import { useState } from "react";
 import { ProjectModal } from "../components/ProjectModal";
 import type { ProjectType } from "../components/ProjectModal";
+import { ExpandableText } from "../components/ExpandableText";
 
 const projects: ProjectType[] = [
     {
@@ -105,7 +106,7 @@ export const ProjectSection = () => {
                                     ))}
                                 </div>
                                 <h3 className="text-xl font-semibold mb-1">{project.title}</h3>
-                                <p className="text-muted-foreground text-sm mb-4 line-clamp-2">{project.text}</p>
+                                <ExpandableText text={project.text} maxLength={80} className="text-muted-foreground text-sm mb-4" />
 
                                 <div className="flex space-x-3">
                                     <a

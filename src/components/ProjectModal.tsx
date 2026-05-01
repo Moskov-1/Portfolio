@@ -23,23 +23,25 @@ interface ProjectModalProps {
 }
 
 export function ProjectModal({ project, onClose }: ProjectModalProps) {
-    const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
     // Close on escape key
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
-            if (e.key === 'Escape') {
-                if (lightboxIndex !== null) setLightboxIndex(null);
-                else onClose();
+            if (e.key === 'Escape') onClose();
+            if (project && (project.images?.length || 0) > 1) {
+                if (e.key === 'ArrowLeft') handlePrev();
+                if (e.key === 'ArrowRight') handleNext();
             }
         };
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [lightboxIndex, onClose]);
+    }, [project, currentImageIndex]);
 
     // Body scroll lock
     useEffect(() => {
         if (!project) return;
+        setCurrentImageIndex(0);
         document.body.style.overflow = "hidden";
         return () => {
             document.body.style.overflow = "auto";
@@ -52,18 +54,12 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
         ? project.images 
         : [{ url: project.image, title: project.title }];
 
-    const handleNext = (e: React.MouseEvent) => {
-        e.stopPropagation();
-        if (lightboxIndex !== null) {
-            setLightboxIndex((lightboxIndex + 1) % images.length);
-        }
+    const handleNext = () => {
+        setCurrentImageIndex((prev) => (prev + 1) % images.length);
     };
 
-    const handlePrev = (e: React.MouseEvent) => {
-        e.stopPropagation();
-        if (lightboxIndex !== null) {
-            setLightboxIndex((lightboxIndex - 1 + images.length) % images.length);
-        }
+    const handlePrev = () => {
+        setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
     };
 
     return (
@@ -75,7 +71,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 onClick={onClose}
-                className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-background/80 backdrop-blur-sm"
+                className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 md:p-12 bg-background/80 backdrop-blur-md"
             >
                 <motion.div
                     key="modal-content"
@@ -83,166 +79,129 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                     animate={{ scale: 1, opacity: 1, y: 0 }}
                     exit={{ scale: 0.95, opacity: 0, y: 20 }}
                     onClick={(e) => e.stopPropagation()}
-                    className="relative w-full max-w-4xl max-h-[90vh] bg-card border border-border rounded-2xl shadow-2xl overflow-hidden flex flex-col"
+                    className="relative w-full max-w-6xl h-[85vh] sm:h-[80vh] bg-card border border-border rounded-2xl shadow-2xl overflow-hidden flex flex-col md:flex-row"
                 >
-                    {/* Header */}
-                    <div className="flex justify-between items-center p-5 sm:p-6 border-b border-border/50 bg-muted/30">
-                        <h2 className="text-2xl sm:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70">
-                            {project.title}
-                        </h2>
-                        <button
-                            onClick={onClose}
-                            className="p-2 rounded-full hover:bg-muted text-muted-foreground hover:text-foreground transition-all duration-200"
-                        >
-                            <X size={24} />
-                        </button>
-                    </div>
+                    {/* Close Button Mobile (absolute top right over everything) */}
+                    <button
+                        onClick={onClose}
+                        className="md:hidden absolute top-4 right-4 z-50 p-2 rounded-full bg-background/50 backdrop-blur-md border border-border text-foreground hover:bg-background transition-colors"
+                    >
+                        <X size={20} />
+                    </button>
 
-                    {/* Content Body */}
-                    <div className="p-5 sm:p-8 overflow-y-auto flex-1 custom-scrollbar">
-                        <div className="flex flex-col md:flex-row gap-8">
-                            <div className="flex-1 space-y-6">
-                                <div className="flex flex-wrap gap-2">
-                                    {project.tags.map(tag => (
-                                        <span key={tag} className="bg-primary/10 border border-primary/20 text-primary rounded-full px-4 py-1.5 text-sm font-semibold tracking-wide">
-                                            {tag}
-                                        </span>
-                                    ))}
-                                </div>
-
-                                <div>
-                                    <h3 className="text-lg font-semibold mb-2 text-foreground/90">About the Project</h3>
-                                    <p className="text-muted-foreground text-base sm:text-lg leading-relaxed">
-                                        {project.text}
-                                    </p>
-                                </div>
-
-                                <div className="flex flex-wrap gap-4 pt-2">
-                                    <a
-                                        href={project.link}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="flex-1 sm:flex-none flex items-center justify-center gap-2 bg-primary text-primary-foreground px-6 py-2.5 rounded-lg hover:opacity-90 transition-opacity font-semibold shadow-md shadow-primary/20"
-                                    >
-                                        <ExternalLink size={20} />
-                                        Live Demo
-                                    </a>
-                                    <a
-                                        href={project.github}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="flex-1 sm:flex-none flex items-center justify-center gap-2 bg-secondary text-secondary-foreground px-6 py-2.5 rounded-lg hover:bg-secondary/80 transition-colors font-semibold border border-border"
-                                    >
-                                        <GitFork size={20} />
-                                        Source Code
-                                    </a>
-                                </div>
-                            </div>
+                    {/* Left Side: Content (40% width on desktop) */}
+                    <div className="w-full md:w-[40%] h-full flex flex-col bg-card relative border-b md:border-b-0 md:border-r border-border">
+                        {/* Scrollable Content Area */}
+                        <div className="p-6 md:p-10 overflow-y-auto no-scrollbar flex-1 flex flex-col custom-scrollbar">
+                            <h2 className="text-2xl sm:text-3xl font-bold mb-6 text-foreground leading-tight bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70">
+                                {project.title}
+                            </h2>
                             
+                            <div className="flex flex-wrap gap-2 mb-8">
+                                {project.tags.map(tag => (
+                                    <span key={tag} className="text-xs font-semibold text-primary bg-primary/10 px-3 py-1.5 rounded-md border border-primary/20 tracking-wide">
+                                        {tag}
+                                    </span>
+                                ))}
+                            </div>
+
                             <div className="flex-1">
-                                <h3 className="text-lg font-semibold mb-4 text-foreground/90">Gallery</h3>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                    {images.map((img, idx) => (
-                                        <div
-                                            key={idx}
-                                            onClick={() => setLightboxIndex(idx)}
-                                            className="relative aspect-video rounded-xl overflow-hidden cursor-pointer group border border-border shadow-sm"
-                                        >
-                                            <img
-                                                src={img.url}
-                                                alt={img.title}
-                                                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                                            />
-                                            <div className="absolute inset-0 bg-background/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-[2px]">
-                                                <span className="text-foreground font-semibold bg-background/80 border border-border px-4 py-1.5 rounded-full shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-all duration-300">
-                                                    View Image
-                                                </span>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
+                                <h3 className="text-lg font-semibold mb-3 text-foreground/90">About the Project</h3>
+                                <p className="text-muted-foreground text-base sm:text-lg leading-relaxed mb-8">
+                                    {project.text}
+                                </p>
+                            </div>
+
+                            <div className="flex flex-wrap gap-4 pt-4 mt-auto">
+                                <a
+                                    href={project.link}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex-1 sm:flex-none flex items-center justify-center gap-2 bg-primary text-primary-foreground px-6 py-2.5 rounded-lg hover:opacity-90 transition-opacity font-semibold shadow-md shadow-primary/20"
+                                >
+                                    <ExternalLink size={20} />
+                                    Live Demo
+                                </a>
+                                <a
+                                    href={project.github}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex-1 sm:flex-none flex items-center justify-center gap-2 bg-secondary text-secondary-foreground px-6 py-2.5 rounded-lg hover:bg-secondary/80 transition-colors font-semibold border border-border"
+                                >
+                                    <GitFork size={20} />
+                                    Source Code
+                                </a>
                             </div>
                         </div>
                     </div>
-                </motion.div>
-            </motion.div>
 
-            {/* Lightbox Modal */}
-            <AnimatePresence>
-                {lightboxIndex !== null && (
-                    <motion.div
-                        key="lightbox-backdrop"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        onClick={() => setLightboxIndex(null)}
-                        className="fixed inset-0 z-[60] flex items-center justify-center bg-black/95 backdrop-blur-xl"
-                    >
-                        {/* Top left title */}
-                        <motion.div 
-                            initial={{ opacity: 0, y: -20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className="absolute top-4 sm:top-6 left-4 sm:left-8 text-white text-lg sm:text-xl font-semibold drop-shadow-lg z-[70] max-w-[70vw] truncate"
-                        >
-                            {images[lightboxIndex].title}
-                        </motion.div>
+                    {/* Right Side: Image Carousel (60% width on desktop) */}
+                    <div className="w-full md:w-[60%] h-64 md:h-full relative bg-black/95 flex items-center justify-center group">
+                        {/* Desktop Close Button */}
+                        <div className="hidden md:flex absolute top-6 right-6 z-10">
+                            <button
+                                onClick={onClose}
+                                className="p-2 rounded-full hover:bg-white/20 bg-white/10 text-white/70 hover:text-white transition-all duration-200 backdrop-blur-md"
+                            >
+                                <X size={24} />
+                            </button>
+                        </div>
 
-                        {/* Top right close */}
-                        <motion.button
-                            initial={{ opacity: 0, y: -20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            onClick={() => setLightboxIndex(null)}
-                            className="absolute top-4 sm:top-6 right-4 sm:right-8 p-3 text-white/70 hover:text-white bg-white/10 hover:bg-white/20 rounded-full backdrop-blur-md transition-all duration-200 z-[70]"
-                        >
-                            <X size={28} />
-                        </motion.button>
+                        {/* Title of current image */}
+                        <div className="absolute top-6 left-6 z-10 text-white/80 font-medium bg-black/40 px-4 py-1.5 rounded-full backdrop-blur-md text-sm border border-white/10">
+                            {images[currentImageIndex].title}
+                        </div>
 
-                        {/* Navigation Buttons */}
+                        <AnimatePresence mode="wait">
+                            <motion.img
+                                key={currentImageIndex}
+                                src={images[currentImageIndex].url}
+                                alt={images[currentImageIndex].title}
+                                initial={{ opacity: 0, scale: 1.02 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                exit={{ opacity: 0 }}
+                                transition={{ duration: 0.3 }}
+                                className="w-full h-full object-contain"
+                            />
+                        </AnimatePresence>
+
+                        {/* Navigation Arrows */}
                         {images.length > 1 && (
                             <>
                                 <button
-                                    onClick={handlePrev}
-                                    className="absolute left-2 sm:left-8 top-1/2 -translate-y-1/2 p-3 sm:p-4 text-white/70 hover:text-white hover:scale-110 bg-white/5 hover:bg-white/20 rounded-full backdrop-blur-md transition-all duration-200 z-[70]"
+                                    onClick={(e) => { e.stopPropagation(); handlePrev(); }}
+                                    className="absolute left-4 top-1/2 -translate-y-1/2 p-2 sm:p-3 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md text-white/70 hover:text-white transition-all duration-200 opacity-100 md:opacity-0 group-hover:opacity-100"
                                 >
-                                    <ChevronLeft size={32} className="sm:w-10 sm:h-10" />
+                                    <ChevronLeft size={24} />
                                 </button>
                                 <button
-                                    onClick={handleNext}
-                                    className="absolute right-2 sm:right-8 top-1/2 -translate-y-1/2 p-3 sm:p-4 text-white/70 hover:text-white hover:scale-110 bg-white/5 hover:bg-white/20 rounded-full backdrop-blur-md transition-all duration-200 z-[70]"
+                                    onClick={(e) => { e.stopPropagation(); handleNext(); }}
+                                    className="absolute right-4 top-1/2 -translate-y-1/2 p-2 sm:p-3 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md text-white/70 hover:text-white transition-all duration-200 opacity-100 md:opacity-0 group-hover:opacity-100"
                                 >
-                                    <ChevronRight size={32} className="sm:w-10 sm:h-10" />
+                                    <ChevronRight size={24} />
                                 </button>
                             </>
                         )}
 
-                        {/* Image */}
-                        <motion.div
-                            key={lightboxIndex}
-                            initial={{ opacity: 0, scale: 0.9, filter: "blur(10px)" }}
-                            animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-                            exit={{ opacity: 0, scale: 0.9, filter: "blur(10px)" }}
-                            transition={{ type: "spring", damping: 25, stiffness: 300 }}
-                            className="relative w-full max-w-[90vw] h-[80vh] flex items-center justify-center p-4 sm:p-12"
-                            onClick={(e) => e.stopPropagation()}
-                        >
-                            <img
-                                src={images[lightboxIndex].url}
-                                alt={images[lightboxIndex].title}
-                                className="max-w-full max-h-full object-contain rounded-lg shadow-[0_0_50px_rgba(0,0,0,0.5)] select-none"
-                            />
-                        </motion.div>
-                        
-                        {/* Image Counter */}
-                        <motion.div 
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className="absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2 text-white/80 font-medium bg-white/10 px-5 py-2 rounded-full backdrop-blur-md tracking-wider text-sm sm:text-base border border-white/10"
-                        >
-                            {lightboxIndex + 1} / {images.length}
-                        </motion.div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
+                        {/* Interactive Carousel Indicators */}
+                        {images.length > 1 && (
+                            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-3 bg-white/10 backdrop-blur-md px-4 py-2.5 rounded-full border border-white/10">
+                                {images.map((_, idx) => (
+                                    <button
+                                        key={idx}
+                                        onClick={(e) => { e.stopPropagation(); setCurrentImageIndex(idx); }}
+                                        className={`h-2.5 rounded-full transition-all duration-300 cursor-pointer ${
+                                            currentImageIndex === idx 
+                                                ? "w-8 bg-white shadow-[0_0_12px_rgba(255,255,255,0.8)]" 
+                                                : "w-2.5 bg-white/50 hover:bg-white/80"
+                                        }`}
+                                    />
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                </motion.div>
+            </motion.div>
         </AnimatePresence>
     );
 }

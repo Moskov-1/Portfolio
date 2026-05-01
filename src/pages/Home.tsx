@@ -5,16 +5,17 @@ import { HeroSection } from "./HeroSection"
 import { AboutMe } from "./AboutMe"
 import { SkillsSection } from "./SkillsSection"
 import { ProjectSection } from "./ProjectSection"
+import { LogSection } from "./LogSection"
 import { ContactSection } from "./ContactSection"
 import { Footer } from "./Footer"
 import { Toaster } from "../ui/toaster"
 import { ThemeTransitionProvider } from "../context/ThemeTransitionContext"
+import { QuickAccess } from "../components/QuickAccess"
 
 export const Home = () => {
     return (
         <ThemeTransitionProvider>
-            <div className="min-h-screen bg-background text-foreground
-            overflow-x-hidden">
+            <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
 
                 <ThemeToggle />
                 <StarBackground />
@@ -25,11 +26,13 @@ export const Home = () => {
                     <AboutMe />
                     <SkillsSection />
                     <ProjectSection />
+                    <LogSection />
                     <ContactSection />
                 </main>
                 <Footer />
+                <QuickAccess />
                 <Toaster />
             </div>
         </ThemeTransitionProvider>
     )
-}
+}
