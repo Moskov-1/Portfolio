@@ -4,6 +4,9 @@ import { fadeUp, viewport } from "../lib/animations";
 import { ExpandableText } from "../components/ExpandableText";
 import { LogModal } from "../components/LogModal";
 import type { LogType } from "../components/LogModal";
+import githubTaker from "../assets/github-taker.png";
+import gitTaker from "../assets/git-taker.png";
+import githubActivity from "../assets/github-activity.png";
 
 const logs: LogType[] = [
     {
@@ -19,15 +22,16 @@ const logs: LogType[] = [
         tags: ["Docker", "DevOps", "Microservices"]
     },
     {
-        title: "Exploring CI/CD Pipelines",
+        title: "The \"Green Square\" Insurance: My GitHub Backup Engine",
         date: "April 2026",
-        text: "Set up my first automated CI/CD pipeline using GitHub Actions. I configured automated testing, linting, and deployment scripts to Vercel and an AWS EC2 instance. The peace of mind that comes with automated deployments is incredible.",
-        image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&q=80&w=1000",
+        text: "We’ve all been there—you pour months of work into a project for a client or an organization, only to have those hard-earned \"green squares\" vanish from your profile the moment the contract ends or the repo access is revoked. It’s a frustrating loss of visible progress. To solve this, I built a custom automated service that acts as a permanent ledger for my contribution history.\n\nThe system is a lean, serverless pipeline designed for 100% data persistence. Every day, a Vercel Cron Job triggers a Node.js service that uses Cheerio to intelligently scrape my latest activity directly from my GitHub profile. That data is then parsed and instantly pushed to a Neon Serverless PostgreSQL database. This setup ensures that even if I lose access to a repository tomorrow, my personal database still holds a verified record of every commit I’ve made. It’s a simple, reliable way to own my professional narrative and ensure my growth is always documented, regardless of where the code lives.\n\nQuick Tech Specs:\n• Automation: Vercel Cron Jobs\n• Runtime: Node.js (Vercel Serverless Functions)\n• Scraping: Cheerio\n• Database: Neon (Serverless Postgres)",
+        image: githubTaker,
         images: [
-            "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&q=80&w=1000",
-            "https://images.unsplash.com/photo-1618401471353-b98afee0b2eb?auto=format&fit=crop&q=80&w=1000"
+            githubTaker,
+            gitTaker,
+            githubActivity
         ],
-        tags: ["CI/CD", "GitHub Actions", "AWS"]
+        tags: ["FullStackDev", "GitHubAutomation", "Serverless", "Vercel", "NodeJS", "PostgreSQL", "DataPersistence", "DevOps", "PortfolioShowcase"]
     },
     {
         title: "Deep Dive into System Design",

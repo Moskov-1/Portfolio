@@ -215,6 +215,19 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+
+  /* ── Custom cursors (mouse/pointer-fine devices only) ── */
+  @media (pointer: fine) {
+    * {
+      cursor: url('/assets/cursor-dark.ani'), auto;
+    }
+    a, button, [role='button'], input[type='submit'],
+    input[type='button'], input[type='reset'], label,
+    select, summary, [tabindex]:not([tabindex='-1']),
+    .cursor-pointer {
+      cursor: url('/assets/pointer-shadow.cur'), pointer;
+    }
+  }
 }
 
 @utility container {

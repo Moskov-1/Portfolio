@@ -1,16 +1,46 @@
-import { useState, useEffect, useRef, memo, useCallback } from "react";
+import { useState, useCallback, memo } from "react";
 import { motion, AnimatePresence, LayoutGroup } from "framer-motion";
 import { cn } from "../lib/utils";
 import { fadeUp, cardPop, staggerNormal, viewport } from "../lib/animations";
 
-// ─── Static data ──────────────────────────────────────────────────────────────
+// ─── Category accent colors (subtle border complement only) ───────────────────
+const CATEGORY_STYLE: Record<string, { border: string; badge: string }> = {
+    Languages:  { border: "border-sky-500/30",    badge: "bg-sky-500/10 text-sky-400"    },
+    Frameworks: { border: "border-violet-500/30", badge: "bg-violet-500/10 text-violet-400" },
+    DevOps:     { border: "border-orange-500/30", badge: "bg-orange-500/10 text-orange-400" },
+    Tools:      { border: "border-emerald-500/30",badge: "bg-emerald-500/10 text-emerald-400" },
+};
 
+// ─── Devicon logo map ──────────────────────────────────────────────────────────
+// Uses https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/...
+const ICON: Record<string, string> = {
+    PHP:          "php/php-original",
+    Python:       "python/python-original",
+    JavaScript:   "javascript/javascript-original",
+    "C++":        "cplusplus/cplusplus-original",
+    YAML:         "yaml/yaml-original",
+    Laravel:      "laravel/laravel-original",
+    Django:       "django/django-plain",
+    React:        "react/react-original",
+    Docker:       "docker/docker-original",
+    EC2:          "amazonwebservices/amazonwebservices-plain-wordmark",
+    Linux:        "linux/linux-original",
+    Git:          "git/git-original",
+    PyTorch:      "pytorch/pytorch-original",
+    "Scikit-Learn":"scikitlearn/scikitlearn-original",
+    PostgreSQL:   "postgresql/postgresql-original",
+};
+
+const iconUrl = (name: string) =>
+    `https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/${ICON[name] ?? "devicon/devicon-original"}.svg`;
+
+// ─── Static data ──────────────────────────────────────────────────────────────
 const SKILLS = [
     { name: "PHP",          levelZ: "Production++",         category: "Languages"  },
     { name: "Python",       levelZ: "Production",           category: "Languages"  },
     { name: "JavaScript",   levelZ: "Competent",            category: "Languages"  },
-    { name: "C++",          levelZ: "(DSA & Algorithms)++", category: "Languages"  },
-    { name: "Lua",          levelZ: "Beginner",             category: "Languages"  },
+    { name: "C++",          levelZ: "DSA & Algorithms++",   category: "Languages"  },
+    { name: "YAML",         levelZ: "Daily Driver",         category: "Languages"  },
     { name: "Laravel",      levelZ: "Production++",         category: "Frameworks" },
     { name: "Django",       levelZ: "Production",           category: "Frameworks" },
     { name: "React",        levelZ: "Competent",            category: "Frameworks" },
@@ -25,75 +55,46 @@ const SKILLS = [
 
 const TYPES = ["All", "Languages", "Frameworks", "DevOps", "Tools"] as const;
 
-// ─── SkillCard — CSS-driven bar animation, zero rAF loops ─────────────────────
-
+// ─── SkillCard ─────────────────────────────────────────────────────────────────
 const SkillCard = memo(({ skill }: { skill: typeof SKILLS[number] }) => {
-    const [isVisible,  setIsVisible]  = useState(false);
-    const [isComplete, setIsComplete] = useState(false);
-    const cardRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        const card = cardRef.current;
-        if (!card) return;
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                if (entry.isIntersecting) {
-                    setIsVisible(true);
-                    observer.unobserve(entry.target);
-                }
-            },
-            { threshold: 0.3 }
-        );
-        observer.observe(card);
-        return () => observer.unobserve(card);
-    }, []);
-
-    useEffect(() => {
-        if (!isVisible) return;
-        const timer = setTimeout(() => setIsComplete(true), 1800);
-        return () => clearTimeout(timer);
-    }, [isVisible]);
-
+    const style = CATEGORY_STYLE[skill.category];
     return (
-        <div ref={cardRef} className="bg-card p-6 rounded-lg shadow-xs card-hover">
-            <div className="text-left mb-4">
-                <h3 className="font-semibold text-lg">{skill.name}</h3>
-            </div>
-            {!isComplete ? (
-                <>
-                    <div className="w-full bg-secondary/50 h-2 rounded-full overflow-hidden">
-                        <div
-                            className="bg-primary h-2 rounded-full origin-left"
-                            style={{
-                                width:      isVisible ? "100%" : "0%",
-                                transition: isVisible ? "width 1.5s ease-out" : "none",
-                                willChange: "width",
-                            }}
-                        />
-                    </div>
-                    <div className="text-right mt-1">
-                        <span className="text-sm text-muted-foreground">
-                            {isVisible ? "Loading…" : "0%"}
-                        </span>
-                    </div>
-                </>
-            ) : (
-                <motion.div
-                    className="text-left mt-4"
-                    initial={{ opacity: 0, y: 8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.4 }}
-                >
-                    <p className="text-primary font-medium">{skill.levelZ}</p>
-                </motion.div>
+        <div
+            className={cn(
+                "bg-card rounded-xl p-5 border shadow-sm hover:shadow-md transition-all duration-300",
+                "flex flex-col items-center gap-3 text-center group",
+                style.border
             )}
+        >
+            {/* Logo */}
+            <div className="w-14 h-14 flex items-center justify-center rounded-lg bg-secondary/40 p-2 transition-transform duration-300 group-hover:scale-110">
+                <img
+                    src={iconUrl(skill.name)}
+                    alt={skill.name}
+                    loading="lazy"
+                    className="w-10 h-10 object-contain"
+                    onError={(e) => {
+                        (e.currentTarget as HTMLImageElement).style.display = "none";
+                    }}
+                />
+            </div>
+
+            {/* Name */}
+            <h3 className="font-semibold text-base text-foreground">{skill.name}</h3>
         </div>
     );
 });
 SkillCard.displayName = "SkillCard";
 
-// ─── SkillsSection ────────────────────────────────────────────────────────────
+// ─── Filter button dot indicator ──────────────────────────────────────────────
+const TYPE_DOT: Record<string, string> = {
+    Languages:  "bg-sky-400",
+    Frameworks: "bg-violet-400",
+    DevOps:     "bg-orange-400",
+    Tools:      "bg-emerald-400",
+};
 
+// ─── SkillsSection ────────────────────────────────────────────────────────────
 export const SkillsSection = () => {
     const [category, setCategory] = useState<typeof TYPES[number]>("All");
 
@@ -107,11 +108,11 @@ export const SkillsSection = () => {
 
     return (
         <section id="skills" className="py-24 px-4 relative bg-secondary/30">
-            <div className={cn("container mx-auto", "max-w-5xl")}>
+            <div className="container mx-auto max-w-5xl">
 
                 {/* Heading */}
                 <motion.h2
-                    className={cn("text-3xl md:text-4xl", "font-bold text-center mb-12")}
+                    className="text-3xl md:text-4xl font-bold text-center mb-12"
                     variants={fadeUp}
                     initial="hidden"
                     whileInView="visible"
@@ -120,10 +121,10 @@ export const SkillsSection = () => {
                     <span className="text-primary">My</span> Skills
                 </motion.h2>
 
-                {/* Filter buttons — stagger in, active indicator uses layoutId */}
+                {/* Filter buttons */}
                 <LayoutGroup>
                     <motion.div
-                        className="flex flex-wrap justify-center gap-4 mb-12"
+                        className="flex flex-wrap justify-center gap-3 mb-12"
                         variants={staggerNormal}
                         initial="hidden"
                         whileInView="visible"
@@ -134,14 +135,14 @@ export const SkillsSection = () => {
                                 key={type}
                                 onClick={() => handleCategory(type)}
                                 className={cn(
-                                    "relative bg-card py-2 px-4 rounded-lg shadow-xs overflow-hidden",
-                                    category === type && "text-primary-foreground"
+                                    "relative bg-card py-2 px-5 rounded-lg shadow-xs overflow-hidden",
+                                    "flex items-center gap-2 text-sm font-medium transition-colors duration-200",
+                                    category === type ? "text-primary-foreground" : "text-muted-foreground hover:text-foreground"
                                 )}
                                 variants={fadeUp}
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
                             >
-                                {/* Sliding background pill for active state */}
                                 {category === type && (
                                     <motion.span
                                         layoutId="active-pill"
@@ -149,15 +150,18 @@ export const SkillsSection = () => {
                                         transition={{ type: "spring", stiffness: 380, damping: 32 }}
                                     />
                                 )}
+                                {type !== "All" && (
+                                    <span className={cn("relative z-10 w-2 h-2 rounded-full shrink-0", TYPE_DOT[type] ?? "bg-primary")} />
+                                )}
                                 <span className="relative z-10">{type}</span>
                             </motion.button>
                         ))}
                     </motion.div>
                 </LayoutGroup>
 
-                {/* Skills grid — AnimatePresence for smooth card enter/exit on filter */}
+                {/* Skills grid */}
                 <motion.div
-                    className={cn("grid grid-cols-1 sm:grid-cols-2", "lg:grid-cols-3 gap-6")}
+                    className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4"
                     layout
                 >
                     <AnimatePresence mode="popLayout">
@@ -175,6 +179,22 @@ export const SkillsSection = () => {
                             </motion.div>
                         ))}
                     </AnimatePresence>
+                </motion.div>
+
+                {/* Legend */}
+                <motion.div
+                    className="flex flex-wrap justify-center gap-4 mt-10"
+                    variants={fadeUp}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={viewport}
+                >
+                    {(["Languages", "Frameworks", "DevOps", "Tools"] as const).map(cat => (
+                        <div key={cat} className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                            <span className={cn("w-2 h-2 rounded-full", TYPE_DOT[cat])} />
+                            {cat}
+                        </div>
+                    ))}
                 </motion.div>
 
             </div>
