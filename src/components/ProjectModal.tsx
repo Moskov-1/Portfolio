@@ -12,8 +12,8 @@ export type ProjectType = {
     text: string;
     image: string;
     images?: ProjectImage[];
-    link: string;
-    github: string;
+    link?: string;
+    github?: string;
     tags: readonly string[];
     frontendLink?: string;
     backendLink?: string;

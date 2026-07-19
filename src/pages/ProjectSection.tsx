@@ -7,6 +7,11 @@ import type { ProjectType } from "../components/ProjectModal";
 import { ExpandableText } from "../components/ExpandableText";
 import ngoFront1 from "../assets/project-imgs/ngo/front-1.png";
 import ngoDash1 from "../assets/project-imgs/ngo/dash-1.png";
+import armandoDiagram from "../assets/project-imgs/armando/armando-diagram.png";
+import armando1 from "../assets/project-imgs/armando/Armando-1.png";
+import armando1_1 from "../assets/project-imgs/armando/Armando-1-1.png";
+import armando2 from "../assets/project-imgs/armando/Armando-2.png";
+import armando3 from "../assets/project-imgs/armando/Armando-3.png";
 
 const projects: ProjectType[] = [
     {
@@ -26,16 +31,18 @@ const projects: ProjectType[] = [
         tags:   ["React", "Laravel", "Docker", "Supabase S3", "PostgreSQL", "Vercel", "Render"],
     },
     {
-        title:  "Project 2",
-        text:   "Description of Project 2",
-        image:  "/projects/project2.jpg",
+        title:  "ChannelGum Account Marketplace",
+        text:   "A dynamic, secure account marketplace allowing account owners to list digital assets and receive offers from potential buyers. Managed the server infrastructure and developed the robust Laravel backend, interactive admin/user dashboards, and transactional features. The platform is built using a hybrid Next.js + Laravel stack, leveraging Laravel Reverb for real-time WebSocket communication (e.g., deal negotiations and instant status updates) and NowPayments integration for automated crypto transactions.",
+        image:  armandoDiagram,
         images: [
-            { url: "/projects/project2.jpg", title: "Project 2 Main View" },
-            { url: "/projects/project3.jpg", title: "Project 2 Mobile View" },
+            { url: armandoDiagram, title: "System Architecture & Flow Diagram" },
+            { url: armando1, title: "Marketplace Homepage & Account Listings" },
+            { url: armando1_1, title: "Offers & Deal Negotiation Interface" },
+            { url: armando2, title: "NowPayments Crypto Payment Integration" },
+            { url: armando3, title: "Admin Management & Server Dashboard" }
         ],
-        link:   "https://example.com/project2",
-        github: "https://github.com/Moskov-1/project2",
-        tags:   ["tag1", "tag2", "tag3"],
+        link:   "https://channelgum.com/",
+        tags:   ["Next.js", "Laravel", "Laravel Reverb", "WebSockets", "NowPayments", "Crypto Payments", "Server Management"],
     },
     {
         title:  "Project 3",
