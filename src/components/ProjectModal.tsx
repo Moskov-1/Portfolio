@@ -15,6 +15,10 @@ export type ProjectType = {
     link: string;
     github: string;
     tags: readonly string[];
+    frontendLink?: string;
+    backendLink?: string;
+    frontendGithub?: string;
+    backendGithub?: string;
 };
 
 interface ProjectModalProps {
@@ -64,7 +68,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
 
     return (
         <AnimatePresence>
-            {/* Main Modal Backdrop */}
+			{/* Main Modal Backdrop */}
             <motion.div
                 key="modal-backdrop"
                 initial={{ opacity: 0 }}
@@ -112,25 +116,74 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                                 </p>
                             </div>
 
-                            <div className="flex flex-wrap gap-4 pt-4 mt-auto">
-                                <a
-                                    href={project.link}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="flex-1 sm:flex-none flex items-center justify-center gap-2 bg-primary text-primary-foreground px-6 py-2.5 rounded-lg hover:opacity-90 transition-opacity font-semibold shadow-md shadow-primary/20"
-                                >
-                                    <ExternalLink size={20} />
-                                    Live Demo
-                                </a>
-                                <a
-                                    href={project.github}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="flex-1 sm:flex-none flex items-center justify-center gap-2 bg-secondary text-secondary-foreground px-6 py-2.5 rounded-lg hover:bg-secondary/80 transition-colors font-semibold border border-border"
-                                >
-                                    <GitFork size={20} />
-                                    Source Code
-                                </a>
+                            <div className="flex flex-wrap gap-3 pt-4 mt-auto w-full">
+                                {project.frontendLink ? (
+                                    <a
+                                        href={project.frontendLink}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex-1 sm:flex-none flex items-center justify-center gap-2 bg-primary text-primary-foreground px-4 py-2.5 rounded-lg hover:opacity-90 transition-opacity font-semibold shadow-md shadow-primary/20 text-sm"
+                                    >
+                                        <ExternalLink size={18} />
+                                        Frontend Demo
+                                    </a>
+                                ) : project.link ? (
+                                    <a
+                                        href={project.link}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex-1 sm:flex-none flex items-center justify-center gap-2 bg-primary text-primary-foreground px-6 py-2.5 rounded-lg hover:opacity-90 transition-opacity font-semibold shadow-md shadow-primary/20"
+                                    >
+                                        <ExternalLink size={20} />
+                                        Live Demo
+                                    </a>
+                                ) : null}
+
+                                {project.backendLink && (
+                                    <a
+                                        href={project.backendLink}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex-1 sm:flex-none flex items-center justify-center gap-2 bg-secondary text-secondary-foreground px-4 py-2.5 rounded-lg hover:bg-secondary/80 transition-colors font-semibold border border-border text-sm"
+                                    >
+                                        <ExternalLink size={18} />
+                                        Backend API
+                                    </a>
+                                )}
+
+                                {project.frontendGithub ? (
+                                    <a
+                                        href={project.frontendGithub}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex-1 sm:flex-none flex items-center justify-center gap-2 bg-secondary text-secondary-foreground px-4 py-2.5 rounded-lg hover:bg-secondary/80 transition-colors font-semibold border border-border text-sm"
+                                    >
+                                        <GitFork size={18} />
+                                        Frontend Code
+                                    </a>
+                                ) : project.github ? (
+                                    <a
+                                        href={project.github}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex-1 sm:flex-none flex items-center justify-center gap-2 bg-secondary text-secondary-foreground px-6 py-2.5 rounded-lg hover:bg-secondary/80 transition-colors font-semibold border border-border"
+                                    >
+                                        <GitFork size={20} />
+                                        Source Code
+                                    </a>
+                                ) : null}
+
+                                {project.backendGithub && (
+                                    <a
+                                        href={project.backendGithub}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex-1 sm:flex-none flex items-center justify-center gap-2 bg-secondary text-secondary-foreground px-4 py-2.5 rounded-lg hover:bg-secondary/80 transition-colors font-semibold border border-border text-sm"
+                                    >
+                                        <GitFork size={18} />
+                                        Backend Code
+                                    </a>
+                                )}
                             </div>
                         </div>
                     </div>

@@ -5,20 +5,25 @@ import { useState } from "react";
 import { ProjectModal } from "../components/ProjectModal";
 import type { ProjectType } from "../components/ProjectModal";
 import { ExpandableText } from "../components/ExpandableText";
+import ngoFront1 from "../assets/project-imgs/ngo/front-1.png";
+import ngoDash1 from "../assets/project-imgs/ngo/dash-1.png";
 
 const projects: ProjectType[] = [
     {
-        title:  "Project 1",
-        text:   "Description of Project 1",
-        image:  "/projects/project1.jpg",
+        title:  "District NGO Portal",
+        text:   "A comprehensive platform designed for non-governmental organizations to showcase their social activities and manage administrative workflows. Developed a responsive frontend with React hosted on Vercel, and a robust Laravel API backend running inside Docker containers on Render. The application leverages a PostgreSQL database and integrates Supabase S3 bucket for media storage, providing smooth uploading and management of social activity feeds.",
+        image:  ngoFront1,
         images: [
-            { url: "/projects/project1.jpg", title: "Project 1 Main View" },
-            { url: "/projects/project2.jpg", title: "Project 1 Dashboard" },
-            { url: "/projects/project3.jpg", title: "Project 1 Mobile View" }
+            { url: ngoFront1, title: "Social Activities Showcase - Landing Page" },
+            { url: ngoDash1, title: "Admin Management & Activity Dashboard" }
         ],
-        link:   "https://example.com/project1",
-        github: "https://github.com/Moskov-1/project1",
-        tags:   ["tag1", "tag2", "tag3"],
+        link:   "https://social-ngo-project.vercel.app/",
+        github: "https://github.com/Moskov-1/social_showcasing_react_project",
+        frontendLink: "https://social-ngo-project.vercel.app/",
+        frontendGithub: "https://github.com/Moskov-1/social_showcasing_react_project",
+        backendLink: "https://social-activity-admin.onrender.com/",
+        backendGithub: "https://github.com/RaihanRony-1917/district-ngo",
+        tags:   ["React", "Laravel", "Docker", "Supabase S3", "PostgreSQL", "Vercel", "Render"],
     },
     {
         title:  "Project 2",
@@ -108,25 +113,86 @@ export const ProjectSection = () => {
                                 <h3 className="text-xl font-semibold mb-1">{project.title}</h3>
                                 <ExpandableText text={project.text} maxLength={80} className="text-muted-foreground text-sm mb-4" />
 
-                                <div className="flex space-x-3">
-                                    <a
-                                        href={project.link}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        onClick={(e) => e.stopPropagation()}
-                                        className="text-foreground/80 hover:text-primary hover:scale-125 transition-all duration-200"
-                                    >
-                                        <ExternalLink size={20} />
-                                    </a>
-                                    <a
-                                        href={project.github}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        onClick={(e) => e.stopPropagation()}
-                                        className="text-foreground/80 hover:text-primary hover:scale-125 transition-all duration-200"
-                                    >
-                                        <GitFork size={20} />
-                                    </a>
+                                <div className="flex flex-wrap items-center gap-3">
+                                    {project.frontendLink ? (
+                                        <a
+                                            href={project.frontendLink}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            onClick={(e) => e.stopPropagation()}
+                                            title="Frontend Demo"
+                                            className="text-foreground/80 hover:text-primary hover:scale-110 transition-all duration-200 flex items-center gap-1 text-xs font-semibold"
+                                        >
+                                            <ExternalLink size={16} />
+                                            <span>FE Demo</span>
+                                        </a>
+                                    ) : project.link ? (
+                                        <a
+                                            href={project.link}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            onClick={(e) => e.stopPropagation()}
+                                            title="Live Demo"
+                                            className="text-foreground/80 hover:text-primary hover:scale-110 transition-all duration-200 flex items-center gap-1 text-xs font-semibold"
+                                        >
+                                            <ExternalLink size={16} />
+                                            <span>Demo</span>
+                                        </a>
+                                    ) : null}
+
+                                    {project.backendLink && (
+                                        <a
+                                            href={project.backendLink}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            onClick={(e) => e.stopPropagation()}
+                                            title="Backend API"
+                                            className="text-foreground/80 hover:text-primary hover:scale-110 transition-all duration-200 flex items-center gap-1 text-xs font-semibold border-l border-border pl-3"
+                                        >
+                                            <ExternalLink size={16} />
+                                            <span>BE API</span>
+                                        </a>
+                                    )}
+
+                                    {project.frontendGithub ? (
+                                        <a
+                                            href={project.frontendGithub}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            onClick={(e) => e.stopPropagation()}
+                                            title="Frontend Code"
+                                            className="text-foreground/80 hover:text-primary hover:scale-110 transition-all duration-200 flex items-center gap-1 text-xs font-semibold border-l border-border pl-3"
+                                        >
+                                            <GitFork size={16} />
+                                            <span>FE Git</span>
+                                        </a>
+                                    ) : project.github ? (
+                                        <a
+                                            href={project.github}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            onClick={(e) => e.stopPropagation()}
+                                            title="Source Code"
+                                            className="text-foreground/80 hover:text-primary hover:scale-110 transition-all duration-200 flex items-center gap-1 text-xs font-semibold"
+                                        >
+                                            <GitFork size={16} />
+                                            <span>Git</span>
+                                        </a>
+                                    ) : null}
+
+                                    {project.backendGithub && (
+                                        <a
+                                            href={project.backendGithub}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            onClick={(e) => e.stopPropagation()}
+                                            title="Backend Code"
+                                            className="text-foreground/80 hover:text-primary hover:scale-110 transition-all duration-200 flex items-center gap-1 text-xs font-semibold border-l border-border pl-3"
+                                        >
+                                            <GitFork size={16} />
+                                            <span>BE Git</span>
+                                        </a>
+                                    )}
                                 </div>
                             </div>
                         </motion.div>
