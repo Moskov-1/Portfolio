@@ -109,6 +109,8 @@ export const ProjectSection = () => {
                             </div>
 
                             <div className="p-6">
+                                <h3 className="text-xl font-semibold mb-1">{project.title}</h3>
+                                <ExpandableText text={project.text} maxLength={80} className="text-muted-foreground text-sm mb-4" />
                                 <div className="flex flex-wrap gap-2 mb-4">
                                     {project.tags.map(tag => (
                                         <span key={tag} className="bg-primary/20 text-primary rounded-md px-2 py-1 text-sm font-medium">
@@ -116,8 +118,6 @@ export const ProjectSection = () => {
                                         </span>
                                     ))}
                                 </div>
-                                <h3 className="text-xl font-semibold mb-1">{project.title}</h3>
-                                <ExpandableText text={project.text} maxLength={80} className="text-muted-foreground text-sm mb-4" />
 
                                 <div className="flex flex-wrap items-center gap-3">
                                     {project.frontendLink ? (
