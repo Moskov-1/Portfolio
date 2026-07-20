@@ -3,6 +3,7 @@ import { BriefcaseBusiness, Code, User } from "lucide-react";
 import { cn } from "../lib/utils";
 import { fadeUp, slideLeft, slideRight, staggerNormal, staggerSlow, viewport } from "../lib/animations";
 import profileImg from "../assets/git-profile-pic-4-by-5.JPG";
+import resumePdf from "../assets/pdf/CV_Raihan_Ahmed.pdf";
 
 const cards = [
     { icon: Code, title: "Backend Engineer", subtitle: "March 2025 – Present" },
@@ -95,7 +96,10 @@ export const AboutMe = () => {
                                     Contact Me
                                 </a>
                                 <a
-                                    href="#contact"
+                                    href={resumePdf}
+                                    download="CV_Raihan_Ahmed.pdf"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
                                     className={cn(
                                         "px-8 py-3 rounded-full border-2 border-primary text-primary font-semibold",
                                         "hover:bg-primary/10 transition-colors duration-300",

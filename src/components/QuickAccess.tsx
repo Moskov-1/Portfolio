@@ -2,9 +2,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import { FileText, Mail, Github, Linkedin, ChevronRight, X, LayoutGrid } from "lucide-react";
 import { cn } from "../lib/utils";
+import resumePdf from "../assets/pdf/CV_Raihan_Ahmed.pdf";
 
 const links = [
-    { icon: FileText, label: "Resume", href: "#", color: "hover:text-emerald-500 hover:border-emerald-500 hover:shadow-[0_0_15px_rgba(16,185,129,0.3)]" },
+    { icon: FileText, label: "Resume", href: resumePdf, color: "hover:text-emerald-500 hover:border-emerald-500 hover:shadow-[0_0_15px_rgba(16,185,129,0.3)]" },
     { icon: Mail, label: "Email", href: "mailto:youremail@example.com", color: "hover:text-rose-500 hover:border-rose-500 hover:shadow-[0_0_15px_rgba(244,63,94,0.3)]" },
     { icon: Github, label: "GitHub", href: "https://github.com", color: "hover:text-zinc-300 hover:border-zinc-300 hover:shadow-[0_0_15px_rgba(212,212,216,0.3)]" },
     { icon: Linkedin, label: "LinkedIn", href: "https://linkedin.com", color: "hover:text-sky-500 hover:border-sky-500 hover:shadow-[0_0_15px_rgba(14,165,233,0.3)]" }
@@ -69,6 +70,7 @@ export const QuickAccess = () => {
                                         <motion.a
                                             key={link.label}
                                             href={link.href}
+                                            download={link.label === "Resume" ? "CV_Raihan_Ahmed.pdf" : undefined}
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             initial={{ x: 0, y: 0, opacity: 0, scale: 0.5, rotate: 45 }}
@@ -115,6 +117,7 @@ export const QuickAccess = () => {
                                         <motion.a
                                             key={link.label}
                                             href={link.href}
+                                            download={link.label === "Resume" ? "CV_Raihan_Ahmed.pdf" : undefined}
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             initial={{ opacity: 0, y: 30, scale: 0.5 }}

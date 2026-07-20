@@ -12,6 +12,7 @@ import armando1 from "../assets/project-imgs/armando/Armando-1.png";
 import armando1_1 from "../assets/project-imgs/armando/Armando-1-1.png";
 import armando2 from "../assets/project-imgs/armando/Armando-2.png";
 import armando3 from "../assets/project-imgs/armando/Armando-3.png";
+import minikubeDiagram from "../assets/project-imgs/k8s/minikube-diagram.png";
 
 const projects: ProjectType[] = [
     {
@@ -45,16 +46,14 @@ const projects: ProjectType[] = [
         tags:   ["Next.js", "Laravel", "Laravel Reverb", "WebSockets", "NowPayments", "Crypto Payments", "Server Management"],
     },
     {
-        title:  "Project 3",
-        text:   "Description of Project 3",
-        image:  "/projects/project3.jpg",
+        title:  "Laravel Docker & Kubernetes Experiment",
+        text:   "A hands-on experiment for dockerizing Laravel applications. Currently running a Laravel application with a PHP server and MySQL database in a Docker container environment. It is designed to run locally using Docker Compose, deployed to Docploy, and orchestrated within a Kubernetes cluster using Minikube.",
+        image:  minikubeDiagram,
         images: [
-            { url: "/projects/project3.jpg", title: "Project 3 Overview" },
-            { url: "/projects/project1.jpg", title: "Project 3 Architecture" },
+            { url: minikubeDiagram, title: "Minikube Laravel Architecture Diagram" },
         ],
-        link:   "https://example.com/project3",
-        github: "https://github.com/Moskov-1/project3",
-        tags:   ["tag1", "tag2", "tag3"],
+        github: "https://github.com/Moskov-1/minikube-laravel-experiment--docker-compose-k8s-",
+        tags:   ["Laravel", "Docker", "Docker Compose", "Kubernetes", "Minikube", "Docploy", "MySQL"],
     },
 ];
 
