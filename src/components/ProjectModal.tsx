@@ -96,7 +96,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                     {/* Left Side: Content (40% width on desktop) */}
                     <div className="w-full md:w-[40%] h-full flex flex-col bg-card relative border-b md:border-b-0 md:border-r border-border">
                         {/* Scrollable Content Area */}
-                        <div className="p-6 md:p-10 overflow-y-auto no-scrollbar flex-1 flex flex-col custom-scrollbar">
+                        <div className="p-6 md:p-10 overflow-y-auto no-scrollbar flex-1 flex flex-col custom-scrollbar" data-lenis-prevent>
                             <h2 className="text-2xl sm:text-3xl font-bold mb-6 text-foreground leading-tight bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70">
                                 {project.title}
                             </h2>

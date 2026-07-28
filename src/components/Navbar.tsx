@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { Variants } from "framer-motion";
+import { useLenis } from "lenis/react";
 import { cn } from "../lib/utils";
 import { staggerFast, fadeIn } from "../lib/animations";
 
@@ -21,14 +22,26 @@ const navLinkVariant: Variants = {
 export const Navbar = () => {
     const [isScrolled,  setIsScrolled]  = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const lenis = useLenis();
+
+    const handleAnchorClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+        if (href.startsWith("#")) {
+            e.preventDefault();
+            if (isMenuOpen) setIsMenuOpen(false);
+            if (lenis) {
+                lenis.scrollTo(href, { offset: -30 });
+            } else {
+                const el = document.querySelector(href);
+                el?.scrollIntoView({ behavior: "smooth" });
+            }
+        }
+    };
 
     useEffect(() => {
         const handleScroll = () => setIsScrolled(window.scrollY > 50);
         window.addEventListener("scroll", handleScroll, { passive: true });
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
-
-    const closeMenu = () => setIsMenuOpen(false);
 
     useEffect(() => {
         if (isMenuOpen) {
@@ -56,6 +69,7 @@ export const Navbar = () => {
                     {/* Logo — CSS hover, no motion wrapper needed */}
                     <a
                         href="#hero"
+                        onClick={(e) => handleAnchorClick(e, "#hero")}
                         className="text-xl font-bold text-primary flex items-center gap-2 transition-transform duration-200 hover:scale-105"
                     >
                         <span className="relative z-10">
@@ -75,6 +89,7 @@ export const Navbar = () => {
                             <motion.a
                                 key={item.name}
                                 href={item.path}
+                                onClick={(e) => handleAnchorClick(e, item.path)}
                                 variants={navLinkVariant}
                                 className="text-sm font-medium transition-colors duration-300 hover:text-primary hover:-translate-y-0.5 inline-block"
                             >
@@ -123,7 +138,7 @@ export const Navbar = () => {
                                 <motion.a
                                     key={item.name}
                                     href={item.path}
-                                    onClick={closeMenu}
+                                    onClick={(e) => handleAnchorClick(e, item.path)}
                                     variants={fadeIn}
                                     className="text-2xl font-semibold hover:text-primary transition-colors duration-300"
                                 >

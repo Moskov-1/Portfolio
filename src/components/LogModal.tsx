@@ -141,7 +141,7 @@ export const LogModal = ({ log, onClose }: LogModalProps) => {
                         </div>
 
                         {/* Scrollable Content Area */}
-                        <div className="p-6 md:p-10 overflow-y-auto no-scrollbar flex-1 flex flex-col custom-scrollbar">
+                        <div className="p-6 md:p-10 overflow-y-auto no-scrollbar flex-1 flex flex-col custom-scrollbar" data-lenis-prevent>
                             <div className="flex items-center gap-3 mb-6 mt-2 md:mt-4">
                                 <span className="text-sm text-primary font-mono bg-primary/10 px-4 py-1.5 rounded-full border border-primary/20">
                                     {log.date}

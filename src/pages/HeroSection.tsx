@@ -1,8 +1,20 @@
 import { motion } from "framer-motion";
 import { ArrowDown } from "lucide-react";
+import { useLenis } from "lenis/react";
 import { fadeUp, staggerNormal } from "../lib/animations";
 
 export const HeroSection = () => {
+    const lenis = useLenis();
+
+    const handleScrollToProjects = (e: React.MouseEvent<HTMLAnchorElement>) => {
+        e.preventDefault();
+        if (lenis) {
+            lenis.scrollTo("#projects", { offset: -30 });
+        } else {
+            document.querySelector("#projects")?.scrollIntoView({ behavior: "smooth" });
+        }
+    };
+
     return (
         <section
             id="hero"
@@ -36,7 +48,7 @@ export const HeroSection = () => {
                     </motion.p>
 
                     <motion.div className="pt-4" variants={fadeUp}>
-                        <a href="#projects" className="space-btn">
+                        <a href="#projects" onClick={handleScrollToProjects} className="space-btn">
                             View My Work
                         </a>
                     </motion.div>

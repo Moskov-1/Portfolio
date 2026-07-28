@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { BriefcaseBusiness, Code, User } from "lucide-react";
+import { useLenis } from "lenis/react";
 import { cn } from "../lib/utils";
 import { fadeUp, slideLeft, slideRight, staggerNormal, staggerSlow, viewport } from "../lib/animations";
 import profileImg from "../assets/git-profile-pic-4-by-5.JPG";
@@ -13,6 +14,16 @@ const cards = [
 const SHOW_GOLD_FILTER = false;
 
 export const AboutMe = () => {
+    const lenis = useLenis();
+
+    const handleScrollToContact = (e: React.MouseEvent<HTMLAnchorElement>) => {
+        e.preventDefault();
+        if (lenis) {
+            lenis.scrollTo("#contact", { offset: -30 });
+        } else {
+            document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" });
+        }
+    };
     return (
         <div id="about" className="py-24 px-4 relative">
             <div className={cn("container mx-auto", "max-w-6xl")}>
@@ -92,7 +103,7 @@ export const AboutMe = () => {
                                 className={cn("flex flex-col", "sm:flex-row gap-4 justify-center lg:justify-start pt-4")}
                                 variants={slideRight}
                             >
-                                <a href="#contact" className="space-btn transition-transform hover:scale-105 hover:-translate-y-0.5 active:scale-95">
+                                <a href="#contact" onClick={handleScrollToContact} className="space-btn transition-transform hover:scale-105 hover:-translate-y-0.5 active:scale-95">
                                     Contact Me
                                 </a>
                                 <a
