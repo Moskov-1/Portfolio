@@ -1,19 +1,20 @@
 import { motion } from "framer-motion";
-import { GitFork, LocateFixed, LucideNetwork, MailCheck, PhoneForwarded, Send } from "lucide-react";
+import { Github, Linkedin, LocateFixed, Mail, PhoneForwarded, Send } from "lucide-react";
 import { cn } from "../lib/utils";
 import { useState } from "react";
 import { toast } from "../hooks/use-toast";
 import { fadeUp, slideLeft, slideRight, staggerNormal, viewport } from "../lib/animations";
 
 const contactInfo = [
-    { icon: MailCheck,      label: "Email",    display: "raihanrony015@gmail.com",  href: "mailto:raihanrony015@gmail.com",                           external: false },
+    { icon: Mail,           label: "Email",    display: "raihanrony015@gmail.com",  href: "mailto:raihanrony015@gmail.com",                           external: false },
     { icon: PhoneForwarded, label: "Phone",    display: "(+88)016017-94897",         href: "tel:+8801601794897",                                        external: false },
     { icon: LocateFixed,    label: "Location", display: "ECB, DHAKA - 1206",         href: "https://maps.google.com/?q=ECB+Chattar,+Dhaka+1206",       external: true  },
 ] as const;
 
 const socials = [
-    { href: "https://www.linkedin.com/in/raihan-rony-a461121a1/", icon: LucideNetwork, label: "LinkedIn" },
-    { href: "https://github.com/Moskov-1",                         icon: GitFork,       label: "GitHub"   },
+    { href: "https://github.com/Moskov-1",                         icon: Github,   label: "GitHub"   },
+    { href: "https://www.linkedin.com/in/raihan-rony-a461121a1/", icon: Linkedin, label: "LinkedIn" },
+    { href: "mailto:raihanrony015@gmail.com",                       icon: Mail,     label: "Email"    },
 ] as const;
 
 export const ContactSection = () => {
@@ -61,43 +62,53 @@ export const ContactSection = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
 
                     {/* Left — slides from left */}
-                    <motion.div className="space-y-8" variants={staggerNormal} initial="hidden" whileInView="visible" viewport={viewport}>
-                        <motion.h3 className="text-2xl font-semibold" variants={slideLeft}>Contact Info</motion.h3>
+                    <motion.div
+                        className="bg-card p-8 rounded-lg shadow-xs flex flex-col justify-between space-y-8"
+                        variants={staggerNormal}
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={viewport}
+                    >
+                        <div className="space-y-6">
+                            <motion.h3 className="text-2xl font-semibold" variants={slideLeft}>Contact Info</motion.h3>
 
-                        <div className="space-y-5">
-                            {contactInfo.map(({ icon: Icon, label, display, href, external }) => (
-                                <motion.div key={label} className="flex items-start space-x-4" variants={slideLeft}>
-                                    {/* CSS group-hover — no motion instance */}
-                                    <div className="p-3 rounded-full bg-primary/10 shrink-0 transition-transform duration-300 hover:scale-110 hover:rotate-6">
-                                        <Icon className="h-6 w-6 text-primary" />
-                                    </div>
-                                    <div>
-                                        <h4 className="font-medium">{label}</h4>
-                                        <a
-                                            href={href}
-                                            {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                                            className="text-muted-foreground hover:text-primary transition-colors duration-300"
-                                        >
-                                            {display}
-                                        </a>
-                                    </div>
-                                </motion.div>
-                            ))}
+                            <div className="space-y-4">
+                                {contactInfo.map(({ icon: Icon, label, display, href, external }) => (
+                                    <motion.div
+                                        key={label}
+                                        className="flex items-center space-x-4 p-3.5 rounded-xl bg-background/50 border border-border/40 hover:border-primary/40 transition-colors duration-300 group"
+                                        variants={slideLeft}
+                                    >
+                                        <div className="p-3 rounded-full bg-primary/10 shrink-0 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6">
+                                            <Icon className="h-5 w-5 text-primary" />
+                                        </div>
+                                        <div>
+                                            <h4 className="text-xs uppercase tracking-wider font-semibold text-muted-foreground">{label}</h4>
+                                            <a
+                                                href={href}
+                                                {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                                                className="font-medium text-foreground hover:text-primary transition-colors duration-300 text-sm sm:text-base break-all sm:break-normal"
+                                            >
+                                                {display}
+                                            </a>
+                                        </div>
+                                    </motion.div>
+                                ))}
+                            </div>
                         </div>
 
-                        <motion.div className="pt-4" variants={slideLeft}>
-                            <h4 className="mb-4 font-medium">Follow Me</h4>
-                            <div className="flex space-x-4">
+                        <motion.div className="pt-6 border-t border-border/40 text-center" variants={slideLeft}>
+                            <h4 className="mb-4 font-semibold text-base">Follow Me</h4>
+                            <div className="flex justify-center space-x-3">
                                 {socials.map(({ href, icon: Icon, label }) => (
                                     <a
                                         key={label}
                                         href={href}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
+                                        {...(href.startsWith("mailto:") ? {} : { target: "_blank", rel: "noopener noreferrer" })}
                                         aria-label={label}
-                                        className="p-3 rounded-full bg-primary/10 hover:-translate-y-1 hover:scale-110 transition-transform duration-200"
+                                        className="p-3.5 rounded-full bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground hover:-translate-y-1 hover:scale-105 transition-all duration-200 shadow-xs"
                                     >
-                                        <Icon className="h-6 w-6 text-primary" />
+                                        <Icon className="h-5 w-5" />
                                     </a>
                                 ))}
                             </div>

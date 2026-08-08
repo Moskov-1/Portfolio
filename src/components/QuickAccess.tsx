@@ -6,9 +6,9 @@ import resumePdf from "../assets/pdf/CV_Raihan_Ahmed.pdf";
 
 const links = [
     { icon: FileText, label: "Resume", href: resumePdf, color: "hover:text-emerald-500 hover:border-emerald-500 hover:shadow-[0_0_15px_rgba(16,185,129,0.3)]" },
-    { icon: Mail, label: "Email", href: "mailto:youremail@example.com", color: "hover:text-rose-500 hover:border-rose-500 hover:shadow-[0_0_15px_rgba(244,63,94,0.3)]" },
-    { icon: Github, label: "GitHub", href: "https://github.com", color: "hover:text-zinc-300 hover:border-zinc-300 hover:shadow-[0_0_15px_rgba(212,212,216,0.3)]" },
-    { icon: Linkedin, label: "LinkedIn", href: "https://linkedin.com", color: "hover:text-sky-500 hover:border-sky-500 hover:shadow-[0_0_15px_rgba(14,165,233,0.3)]" }
+    { icon: Mail, label: "Email", href: "mailto:raihanrony015@gmail.com", color: "hover:text-rose-500 hover:border-rose-500 hover:shadow-[0_0_15px_rgba(244,63,94,0.3)]" },
+    { icon: Github, label: "GitHub", href: "https://github.com/Moskov-1", color: "hover:text-zinc-300 hover:border-zinc-300 hover:shadow-[0_0_15px_rgba(212,212,216,0.3)]" },
+    { icon: Linkedin, label: "LinkedIn", href: "https://www.linkedin.com/in/raihan-rony-a461121a1/", color: "hover:text-sky-500 hover:border-sky-500 hover:shadow-[0_0_15px_rgba(14,165,233,0.3)]" }
 ];
 
 export const QuickAccess = () => {
@@ -71,8 +71,8 @@ export const QuickAccess = () => {
                                             key={link.label}
                                             href={link.href}
                                             download={link.label === "Resume" ? "CV_Raihan_Ahmed.pdf" : undefined}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
+                                            target={link.href.startsWith("mailto:") ? undefined : "_blank"}
+                                            rel={link.href.startsWith("mailto:") ? undefined : "noopener noreferrer"}
                                             initial={{ x: 0, y: 0, opacity: 0, scale: 0.5, rotate: 45 }}
                                             animate={{ x, y, opacity: 1, scale: 1, rotate: 0 }}
                                             exit={{ x: 0, y: 0, opacity: 0, scale: 0.5, rotate: 45 }}
@@ -118,8 +118,8 @@ export const QuickAccess = () => {
                                             key={link.label}
                                             href={link.href}
                                             download={link.label === "Resume" ? "CV_Raihan_Ahmed.pdf" : undefined}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
+                                            target={link.href.startsWith("mailto:") ? undefined : "_blank"}
+                                            rel={link.href.startsWith("mailto:") ? undefined : "noopener noreferrer"}
                                             initial={{ opacity: 0, y: 30, scale: 0.5 }}
                                             animate={{ opacity: 1, y: 0, scale: 1 }}
                                             exit={{ opacity: 0, y: 30, scale: 0.5 }}
